@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">登录页</h3>
       </div>
 
       <el-form-item prop="username">
@@ -41,11 +41,11 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
 
       <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span>
+        <span style="margin-right:20px;">用户名: admin</span>
+        <span> 密码: 123456</span>
       </div>
 
     </el-form>
@@ -54,6 +54,8 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
+import { login } from '@/api/login'
+import { setToken, saveUserInfo } from '@/utils/myAuth'
 
 export default {
   name: 'Login',
@@ -75,7 +77,7 @@ export default {
     return {
       loginForm: {
         username: 'admin',
-        password: '111111'
+        password: '123456'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -107,13 +109,25 @@ export default {
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
+        // 登录校验
         if (valid) {
+          // 开启加载进度
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
+          login(this.loginForm).then(res => {
+            // then接收响应结果
+            const { success, data, message } = res
+            // 如果成功 设置token值 保存用户信息
+            if (success) {
+              const { token, userInfo } = data
+              setToken(token)
+              saveUserInfo(userInfo)
+            } else {
+              // 登录失败弹出错误信息
+              this.$message.error(message)
+            }
+            // 跳转页面
+            this.$router.push('/')
+            this.loading = false // 取消加载
           })
         } else {
           console.log('error submit!!')
@@ -149,7 +163,7 @@ $cursor: #fff;
     input {
       background: transparent;
       border: 0px;
-      -webkit-appearance: none;
+      //-webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
       color: $light_gray;

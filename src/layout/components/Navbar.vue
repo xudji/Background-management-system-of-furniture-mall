@@ -7,7 +7,9 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+          <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" > -->
+          <span>{{ username }}</span>
+          <img class="user-avatar" :src="avatar" alt="">
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -35,6 +37,8 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import { getUserInfo, removeUserInfo, removeToken } from '@/utils/myAuth'
+// import { remove } from 'js-cookie'
 
 export default {
   components: {
@@ -43,17 +47,23 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'sidebar',
-      'avatar'
-    ])
+      'sidebar'
+    ]),
+    avatar() {
+      return getUserInfo().icon
+    },
+    username() {
+      return getUserInfo().username
+    }
   },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
-      await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      removeToken()
+      removeUserInfo()
+      this.$router.push('./login')
     }
   }
 }
@@ -65,7 +75,7 @@ export default {
   overflow: hidden;
   position: relative;
   background: #fff;
-  box-shadow: 0 1px 4px rgba(0,21,41,.08);
+  box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
 
   .hamburger-container {
     line-height: 46px;
@@ -73,7 +83,7 @@ export default {
     float: left;
     cursor: pointer;
     transition: background .3s;
-    -webkit-tap-highlight-color:transparent;
+    -webkit-tap-highlight-color: transparent;
 
     &:hover {
       background: rgba(0, 0, 0, .025)
@@ -114,9 +124,17 @@ export default {
     .avatar-container {
       margin-right: 30px;
 
+      span {
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+      }
+
       .avatar-wrapper {
         margin-top: 5px;
         position: relative;
+        display: flex;
+        align-items: center;
 
         .user-avatar {
           cursor: pointer;
