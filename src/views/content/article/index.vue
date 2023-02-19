@@ -53,7 +53,12 @@
           <el-table-column label="作者" prop="author" width="170" align="center" />
           <el-table-column label="文章是否展示" prop="author" width="120" align="center">
             <template slot-scope="scope">
-              <el-switch v-model="scope.row.isShow" :active-value="1" :inactive-value="0" />
+              <el-switch
+                v-model="scope.row.isShow"
+                :active-value="1"
+                :inactive-value="0"
+                @change="changeArticleShowStatus(scope.row.isShow, scope.row.id)"
+              />
             </template>
           </el-table-column>
           <el-table-column label="编辑类型" prop="editorType" width="160" align="center">
@@ -65,32 +70,40 @@
           </el-table-column>
 
           <el-table-column label="操作" width="180" align="center" fixed="right">
-            <template>
+            <template slot-scope="scope">
               <el-button type="text" size="mini" icon="el-icon-view">编辑文章</el-button>
-              <el-button type="text" size="mini" style="color:red;">删除</el-button>
+              <el-button type="text" size="mini" style="color:red;" @click="goDeleteArticle(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
 
           <!-- card body -->
         </el-table>
-        <el-pagination style="margin-top: 10px; text-align: right;" :page-size="limit" @size-change="handleSizeChange"
-          :total="100" layout="total, sizes, prev, pager, next, jumper" :page-sizes="[10, 20, 30, 40]"
-          @current-change="handleCurrentChange" :current-page.sync="start" />
+        <el-pagination
+          style="margin-top: 10px; text-align: right;"
+          :page-size="pagniationParams.limit"
+          :total="pagniationParams.totalNum"
+          layout="total, sizes, prev, pager, next, jumper"
+          :page-sizes="pagniationParams.pageSizes"
+          :current-page.sync="pagniationParams.start"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
       </el-card>
     </el-card>
+    <button type="type">你好</button>
   </div>
 </template>
 
 <script>
-import { findArticales as findArticlesApi } from '@/api/content/articale'
+import { findArticales as findArticlesApi, changeShowStatus as changeShowStatusApi, delArticle as delArticleApi } from '@/api/content/articale'
+import mix from '@/mixins/index'
+import { filterNullParams } from '@/utils'
 export default {
+  mixins: [mix],
   data() {
     return {
       searchArticleForm: {},
       articleList: [],
-      start: 1,
-      limit: 10,
-      totalNum: 0,
       loading: false
     }
   },
@@ -112,25 +125,58 @@ export default {
       this.start = 1 // 从第一页开始搜索
       this.getArticleList()
     },
+    // 修改文章显示状态
+    changeArticleShowStatus(isShow, id) {
+      changeShowStatusApi({
+        isShow,
+        id
+      }).then(res => {
+        const { success, message } = res
+        if (success) {
+          this.$message.success('文章显示状态修改成功')
+        } else {
+          this.$message.error(message)
+        }
+      })
+    },
+    // 删除文章 传入id确定删除对象
+    goDeleteArticle(id) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 删除文章
+        delArticleApi(id).then(res => {
+          const { success, message } = res
+          if (success) {
+            // 刷新数据
+            this.getArticleList()
+          } else {
+            this.$message.error(message)
+          }
+        })
+      }).catch(() => {
+        // 点击取消
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
     // 获取文章列表
     getArticleList() {
       this.loading = true
-      var searchObj = {}
-      for (const key in this.searchArticleForm) {
-        if (this.searchArticleForm[key] !== '') {
-          searchObj[key] = this.searchArticleForm[key]
-        }
-      }
-      console.log(searchObj)
+      const searchObj = filterNullParams(this.searchArticleForm)
       // 过滤 如果只填一个参数
-      findArticlesApi(this.start, this.limit, searchObj)
+      findArticlesApi(this.pagniationParams.start, this.pagniationParams.limit, searchObj)
         .then(res => {
           // console.log(res)
           const { success, data, message } = res
           if (success) {
             const { rows, total } = data
             this.articleList = rows
-            console.log(total)
+            this.pagniationParams.totalNum = total
           } else {
             this.$message.error(message)
           }
