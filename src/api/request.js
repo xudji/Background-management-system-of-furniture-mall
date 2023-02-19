@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/myAuth'
+import { getToken, removeToken, removeUserInfo } from '@/utils/myAuth'
+// import { remove } from 'nprogress'
 
 // create an axios instance
 const service = axios.create({
@@ -32,6 +33,11 @@ service.interceptors.response.use(
         type: 'error',
         duration: 5 * 1000
       })
+      if (res.code === 20002) { // token过期
+        removeToken()
+        removeUserInfo()
+        this.$router.push('/login')
+      } // token 过期
       if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
         // to re-login
         MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {

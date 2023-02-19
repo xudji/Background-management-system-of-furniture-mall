@@ -9,8 +9,6 @@
     "build:stage": "vue-cli-service build --mode staging",
     "preview": "node build/index.js --preview",
     "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.yml",
-    "lint": "eslint --fix --ext .js,.vue ./",
-    "lintFix": "eslint --fix --ext .js,.vue src",
     "test:unit": "jest --clearCache && vue-cli-service test:unit",
     "test:ci": "npm run lint && npm run test:unit"
   },
@@ -27,6 +25,8 @@
     "vuex": "3.1.0"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.52.0",
+    "@typescript-eslint/parser": "^5.52.0",
     "@vue/cli-plugin-babel": "4.4.4",
     "@vue/cli-plugin-eslint": "4.4.4",
     "@vue/cli-plugin-unit-jest": "4.4.4",
@@ -38,8 +38,8 @@
     "babel-plugin-dynamic-import-node": "2.3.3",
     "chalk": "2.4.2",
     "connect": "3.6.6",
-    "eslint": "6.7.2",
-    "eslint-plugin-vue": "6.2.2",
+    "eslint": "^6.8.0",
+    "eslint-plugin-vue": "^9.9.0",
     "html-webpack-plugin": "3.2.0",
     "mockjs": "1.0.1-beta3",
     "runjs": "4.3.2",

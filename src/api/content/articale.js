@@ -29,10 +29,18 @@ function delArticle(id) {
     method: 'delete'
   })
 }
-
+// 添加文章
+function addArticle(data) {
+  return request({
+    url: `/lejuAdmin/productArticle/addArticle`,
+    method: 'post',
+    data
+  })
+}
 export {
   findArticales,
   changeShowStatus,
-  delArticle
+  delArticle,
+  addArticle
 }
 

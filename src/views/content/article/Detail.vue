@@ -29,7 +29,7 @@
 
           <el-col :span="12" :offset="0">
             <el-form-item label="封面图片" size="normal">
-              <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/">
+              <el-upload :action="uploadFileOss" :headers=token>
                 <el-button size="small" type="primary">点击上传</el-button>
                 <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
               </el-upload>
@@ -37,7 +37,7 @@
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="16" :offset="0">
+          <el-col :span="20" :offset="0">
             <el-form-item label="切换富文本类型" size="">
               <el-radio v-model="article.editorType" :label="0">富文本</el-radio>
               <el-radio v-model="article.editorType" :label="1">markdown</el-radio>
@@ -52,25 +52,28 @@
           </el-col>
         </el-row>
         <el-form-item>
-          <el-button type="primary">立即创建</el-button>
+          <el-button type="primary" @click="addArticle">立即创建</el-button>
           <el-button>取消</el-button>
         </el-form-item>
       </el-form>
 
       <!-- card body -->
     </el-card>
-
   </div>
 </template>
 
 <script>
 import Tinymce from '@/components/Tinymce'
+import { addArticle as addArticleApi } from '@/api/content/articale'
+import mixin from '@/mixins'
+import getToken from '@/utils/myAuth'
 export default {
   name: 'ArticleDetail',
   components: {
-    Tinymce
+    Tinymce,
+    getToken
   },
-  mixins: [],
+  mixins: [mixin],
   data() {
     return {
       article: {},
@@ -80,14 +83,49 @@ export default {
         ],
         title: [
           { required: true, message: '请输入文章标题', trigger: 'blur' }
-        ]
-      }
+        ],
+        article: {
+          editorType: 0
+        }
+      },
+
+
     }
   },
   mounted() {
   },
   created() {
 
+  },
+  methods: {
+    // 封面图片上传成功
+    coverImgUploadSucc(response, file, fileList) {
+      console.log('response', response)
+      console.log('file', file)
+      console.log('fileList', fileList)
+    },
+    addArticle() {
+      this.$refs.articleform.validate((valid) => {
+        if (valid) {
+          console.log(this.article);
+          //  富文本转换后html和原文一样
+          // 校验成功
+          // addArticleApi(this.article)
+          //   .then(res => {
+          //     const { success, message } = res
+          //     if (success) {
+          //       // 添加成功跳转文章列表页面
+          //       this.$router.push({ name: 'Article' })
+          //     } else {
+          //       this.$message.error(message)
+          //     }
+          //   })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    }
   }
 }
 </script>

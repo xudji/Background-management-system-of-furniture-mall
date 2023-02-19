@@ -1,5 +1,5 @@
 <template>
-  <div :class="{fullscreen:fullscreen}" class="tinymce-container" :style="{width:containerWidth}">
+  <div :class="{ fullscreen: fullscreen }" class="tinymce-container" :style="{ width: containerWidth }">
     <textarea :id="tinymceId" class="tinymce-textarea" />
     <div class="editor-custom-btn-container">
       <editorImage color="#1890ff" class="editor-upload-btn" @successCBK="imageSuccessCBK" />
@@ -16,17 +16,20 @@ import editorImage from './components/EditorImage'
 import plugins from './plugins'
 import toolbar from './toolbar'
 import load from './dynamicLoadScript'
+import axios from 'axios'
+import { getToken } from '@/utils/myAuth'
+import mix from '@/mixins'
 
 // why use this cdn, detail see https://github.com/PanJiaChen/tinymce-all-in-one
 const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js'
 
 export default {
   name: 'Tinymce',
-  components: { editorImage },
+  components: { editorImage, getToken },
   props: {
     id: {
       type: String,
-      default: function() {
+      default: function () {
         return 'vue-tinymce-' + +new Date() + ((Math.random() * 1000).toFixed(0) + '')
       }
     },
@@ -56,6 +59,7 @@ export default {
       default: 'auto'
     }
   },
+  mixins: [mix],
   data() {
     return {
       hasChange: false,
@@ -148,6 +152,41 @@ export default {
             _this.fullscreen = e.state
           })
         },
+
+        images_upload_handler(blobInfo, success, failure, progress) {
+          progress(0)
+          // const token = _this.$store.getters.token;
+          var token = getToken()
+          const formData = new FormData()
+          formData.append('file', blobInfo.blob())
+          axios.post(_this.uploadFileOss, formData, {
+            headers: { 'token': token }
+          }).then(res => {
+            const { success: succ, data, message } = res.data
+            if (succ) {
+              // 把数据回填到tinymce
+              success(data.material.ossUrl)
+            } else {
+              failure(message)
+              progress(100)
+            }
+
+          })
+          // getToken(token).then(response => {
+          //   const url = response.data.qiniu_url;
+          //   const formData = new FormData();
+          //   formData.append('token', response.data.qiniu_token);
+          //   formData.append('key', response.data.qiniu_key);
+          //   formData.append('file', blobInfo.blob(), url);
+          //   upload(formData).then(() => {
+          //     success(url);
+          //     progress(100);
+          //   })
+          // }).catch(err => {
+          //   failure('出现未知问题，刷新页面，或者联系程序员')
+          //   console.log(err);
+          // });
+        },
         // it will try to keep these URLs intact
         // https://www.tiny.cloud/docs-3x/reference/configuration/Configuration3x@convert_urls/
         // https://stackoverflow.com/questions/5196205/disable-tinymce-absolute-to-relative-url-conversions
@@ -167,24 +206,7 @@ export default {
         //   }, 0);
         //   return img
         // },
-        // images_upload_handler(blobInfo, success, failure, progress) {
-        //   progress(0);
-        //   const token = _this.$store.getters.token;
-        //   getToken(token).then(response => {
-        //     const url = response.data.qiniu_url;
-        //     const formData = new FormData();
-        //     formData.append('token', response.data.qiniu_token);
-        //     formData.append('key', response.data.qiniu_key);
-        //     formData.append('file', blobInfo.blob(), url);
-        //     upload(formData).then(() => {
-        //       success(url);
-        //       progress(100);
-        //     })
-        //   }).catch(err => {
-        //     failure('出现未知问题，刷新页面，或者联系程序员')
-        //     console.log(err);
-        //   });
-        // },
+
       })
     },
     destroyTinymce() {
