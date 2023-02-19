@@ -36,7 +36,7 @@
       <!-- 文章列表 -->
       <el-card shadow="neveralways" class="margin-30">
         <div slot="header">
-          <el-button type="primary" size="mini">新增</el-button>
+          <el-button type="primary" size="mini" @click="goAddArticle">新增</el-button>
         </div>
         <el-table v-loading="loading" :data="articleList" border stripe>
           <el-table-column label="#" type="index" align="center" />
@@ -99,6 +99,7 @@ import { findArticales as findArticlesApi, changeShowStatus as changeShowStatusA
 import mix from '@/mixins/index'
 import { filterNullParams } from '@/utils'
 export default {
+  name: 'Article',
   mixins: [mix],
   data() {
     return {
@@ -115,6 +116,9 @@ export default {
   },
 
   methods: {
+    goAddArticle() {
+      this.$router.push({ name: 'AriticleDetail' })
+    },
     // 重置表单
     resetForm() {
       this.searchArticleForm = {}
