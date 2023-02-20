@@ -29,8 +29,10 @@
 
           <el-col :span="12" :offset="0">
             <el-form-item label="封面图片" size="normal">
-              <el-upload :action="uploadFileOss" :headers=token>
-                <el-button size="small" type="primary">点击上传</el-button>
+              <el-upload ref="uploadCom" :action="uploadFileOss" :headers="token" :on-success="coverImgUploadSucc"
+                :before-upload="beforeCoverImgUpload">
+                <img width="100" height="100" v-if="article.coverImg" :src="article.coverImg" alt="">
+                <el-button v-else size="small" type="primary">点击上传</el-button>
                 <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
               </el-upload>
             </el-form-item>
@@ -85,7 +87,8 @@ export default {
           { required: true, message: '请输入文章标题', trigger: 'blur' }
         ],
         article: {
-          editorType: 0
+          editorType: 0,
+          coverImg: ''
         }
       },
 
@@ -98,11 +101,28 @@ export default {
 
   },
   methods: {
+    // 封面图片上传前校验
+    beforeCoverImgUpload(file) {
+      const reg = /^image\/(jpeg|png|gif|webp)$/g
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!reg) {
+        this.$message.error('上传头像图片只能是 JPG 格式!');
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!');
+      }
+      return reg && isLt2M;
+    },
     // 封面图片上传成功
-    coverImgUploadSucc(response, file, fileList) {
-      console.log('response', response)
-      console.log('file', file)
-      console.log('fileList', fileList)
+    coverImgUploadSucc(response) {
+      const { success, data, message } = response
+      if (success) {
+        this.article.coverImg = data.filrUrl
+        this.$refs.uploadCom.clearFiles()
+      } else {
+        this.$message.error(message)
+      }
     },
     addArticle() {
       this.$refs.articleform.validate((valid) => {
@@ -110,16 +130,16 @@ export default {
           console.log(this.article);
           //  富文本转换后html和原文一样
           // 校验成功
-          // addArticleApi(this.article)
-          //   .then(res => {
-          //     const { success, message } = res
-          //     if (success) {
-          //       // 添加成功跳转文章列表页面
-          //       this.$router.push({ name: 'Article' })
-          //     } else {
-          //       this.$message.error(message)
-          //     }
-          //   })
+          addArticleApi(this.article)
+            .then(res => {
+              const { success, message } = res
+              if (success) {
+                // 添加成功跳转文章列表页面
+                this.$router.push({ name: 'Article' })
+              } else {
+                this.$message.error(message)
+              }
+            })
         } else {
           console.log('error submit!!')
           return false
