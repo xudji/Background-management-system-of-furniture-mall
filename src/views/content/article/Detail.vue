@@ -2,7 +2,7 @@
   <div class="article-detail-main">
     <el-card shadow="never" class="margin-30">
       <div slot="header">
-        <span>新增文章</span>
+        <span>{{ id ? '修改文章' : '新增文章' }}</span>
       </div>
       <el-form ref="articleform" :model="article" :rules="rules" label-width="120px" size="mini">
         <el-row :gutter="20">
@@ -59,10 +59,15 @@
             <Tinymce />
           </el-col>
         </el-row>
-        <el-form-item>
-          <el-button type="primary" @click="addArticle">立即创建</el-button>
-          <el-button>取消</el-button>
-        </el-form-item>
+
+        <el-row :gutter="20" type="flex" justify="center" style="margin-top: 20px;">
+          <el-col :span="6">
+            <el-form-item>
+              <el-button type="primary" @click="addArticle">{{ id ? '立即修改' : '立即新增' }}</el-button>
+            </el-form-item></el-col>
+        </el-row>
+
+
       </el-form>
 
       <!-- card body -->
@@ -72,7 +77,7 @@
 
 <script>
 import Tinymce from '@/components/Tinymce'
-import { addArticle as addArticleApi } from '@/api/content/articale'
+import { addArticle as addArticleApi, productArticle as productArticleApi, updateArticle as updateArticleApi } from '@/api/content/articale'
 import mixin from '@/mixins'
 export default {
   name: 'ArticleDetail',
@@ -97,9 +102,23 @@ export default {
   mounted() {
   },
   created() {
-
+    this.id = this.$route.params.id
+    console.log(this.id)
+    if (this.id) {
+      this.getArticleDetail()
+    }
   },
   methods: {
+    getArticleDetail() {
+      productArticleApi(this.id).then(res => {
+        const { success, data, message } = res
+        if (success) {
+          this.article = data.productArticle
+        } else {
+          this.$message.error(message)
+        }
+      })
+    },
     // 封面图片上传前校验
     beforeCoverImgUpload(file) {
       const reg = /^image\/(jpeg|png|gif|webp)$/g
@@ -132,12 +151,19 @@ export default {
           console.log(this.article);
           //  富文本转换后html和原文一样
           // 校验成功
-          addArticleApi(this.article)
+          var api = null
+          if (this.id) { // 更新
+            this.article.id = this.id
+            api = updateArticleApi
+          } else { // 新增
+            api = addArticleApi
+          }
+          api(this.article)
             .then(res => {
               const { success, message } = res
               if (success) {
                 // 添加成功跳转文章列表页面
-                this.$router.push({ path: 'article' })
+                this.$router.push({ name: 'Ariticle' })
               } else {
                 this.$message.error(message)
               }

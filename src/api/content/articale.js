@@ -29,7 +29,7 @@ function delArticle(id) {
     method: 'delete'
   })
 }
-// 添加文章w
+// 添加文章
 function addArticle(data) {
   return request({
     url: `/lejuAdmin/productArticle/addArticle`,
@@ -37,10 +37,28 @@ function addArticle(data) {
     data
   })
 }
+// 修改文章
+function productArticle(id) {
+  return request({
+    url: `/lejuAdmin/productArticle/productArticle/${id}`,
+
+  })
+}
+// 更新文章
+function updateArticle(data) {
+  return request({
+    url: `/lejuAdmin/productArticle/updateArticle`,
+    method: 'post',
+    data
+  })
+}
+
 export {
   findArticales,
   changeShowStatus,
   delArticle,
-  addArticle
+  addArticle,
+  productArticle,
+  updateArticle
 }
 

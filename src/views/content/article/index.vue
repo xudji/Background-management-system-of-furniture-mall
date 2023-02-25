@@ -53,12 +53,8 @@
           <el-table-column label="作者" prop="author" width="170" align="center" />
           <el-table-column label="文章是否展示" prop="author" width="120" align="center">
             <template slot-scope="scope">
-              <el-switch
-                v-model="scope.row.isShow"
-                :active-value="1"
-                :inactive-value="0"
-                @change="changeArticleShowStatus(scope.row.isShow, scope.row.id)"
-              />
+              <el-switch v-model="scope.row.isShow" :active-value="1" :inactive-value="0"
+                @change="changeArticleShowStatus(scope.row.isShow, scope.row.id)" />
             </template>
           </el-table-column>
           <el-table-column label="编辑类型" prop="editorType" width="160" align="center">
@@ -71,23 +67,17 @@
 
           <el-table-column label="操作" width="180" align="center" fixed="right">
             <template slot-scope="scope">
-              <el-button type="text" size="mini" icon="el-icon-view">编辑文章</el-button>
+              <el-button type="text" size="mini" icon="el-icon-view" @click="goEditArticle(scope.row.id)">编辑文章</el-button>
               <el-button type="text" size="mini" style="color:red;" @click="goDeleteArticle(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
 
           <!-- card body -->
         </el-table>
-        <el-pagination
-          style="margin-top: 10px; text-align: right;"
-          :page-size="pagniationParams.limit"
-          :total="pagniationParams.totalNum"
-          layout="total, sizes, prev, pager, next, jumper"
-          :page-sizes="pagniationParams.pageSizes"
-          :current-page.sync="pagniationParams.start"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
+        <el-pagination style="margin-top: 10px; text-align: right;" :page-size="pagniationParams.limit"
+          :total="pagniationParams.totalNum" layout="total, sizes, prev, pager, next, jumper"
+          :page-sizes="pagniationParams.pageSizes" :current-page.sync="pagniationParams.start"
+          @size-change="handleSizeChange" @current-change="handleCurrentChange" />
       </el-card>
     </el-card>
     <button type="type">你好</button>
@@ -116,6 +106,11 @@ export default {
   },
 
   methods: {
+    // 去编辑文章
+    goEditArticle(id) {
+      this.$router.push({ name: 'EditArticle', params: { id } })
+    },
+    // 去新增文章
     goAddArticle() {
       this.$router.push({ name: 'AriticleDetail' })
     },

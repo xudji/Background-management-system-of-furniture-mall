@@ -45,11 +45,18 @@ export const constantRoutes = [
         meta: { title: '文章列表', icon: 'el-icon-document' }
       },
       {
-        path: 'detail',
+        path: 'add/article',
         name: 'AriticleDetail',
         hidden: true,
         component: () => import('@/views/content/article/Detail'),
         meta: { title: '新增文章', icon: 'table', activeMenu: '/content/article' }
+      },
+      {
+        path: 'edit/article:id',
+        name: 'EditArticle',
+        hidden: true,
+        component: () => import('@/views/content/article/Detail'),
+        meta: { title: '编辑文章', icon: 'table', activeMenu: '/content/article' }
       },
       {
         path: 'material',
