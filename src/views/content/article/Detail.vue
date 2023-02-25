@@ -16,28 +16,34 @@
               <el-input v-model="article.title" placeholder="标题" />
             </el-form-item></el-col>
 
+
           <el-col :span="6" :offset="0">
             <el-form-item label="是否显示">
               <el-switch v-model="article.isShow" :active-value="1" :inactive-value="0" />
 
             </el-form-item></el-col>
-
+        </el-row>
+        <el-row :gutter="20">
           <el-col :span="13" :offset="0">
             <el-form-item label="摘要">
               <el-input v-model="article.summary" type="textarea" rows="3" placeholder="摘要" />
             </el-form-item></el-col>
-
+        </el-row>
+        <el-row :gutter="20">
           <el-col :span="12" :offset="0">
             <el-form-item label="封面图片" size="normal">
               <el-upload ref="uploadCom" :action="uploadFileOss" :headers="token" :on-success="coverImgUploadSucc"
                 :before-upload="beforeCoverImgUpload">
-                <img width="100" height="100" v-if="article.coverImg" :src="article.coverImg" alt="">
+
+
+                <img v-if="article.coverImg" :src="article.coverImg" alt="" width="100" height="100">
                 <el-button v-else size="small" type="primary">点击上传</el-button>
                 <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
               </el-upload>
             </el-form-item>
           </el-col>
         </el-row>
+
         <el-row :gutter="20">
           <el-col :span="20" :offset="0">
             <el-form-item label="切换富文本类型" size="">
@@ -68,31 +74,24 @@
 import Tinymce from '@/components/Tinymce'
 import { addArticle as addArticleApi } from '@/api/content/articale'
 import mixin from '@/mixins'
-import getToken from '@/utils/myAuth'
 export default {
   name: 'ArticleDetail',
   components: {
     Tinymce,
-    getToken
   },
   mixins: [mixin],
   data() {
     return {
-      article: {},
+
       rules: {
-        author: [
-          { required: true, message: '请输入作者名称', trigger: 'blur' }
-        ],
-        title: [
-          { required: true, message: '请输入文章标题', trigger: 'blur' }
-        ],
-        article: {
-          editorType: 0,
-          coverImg: ''
-        }
+        author: [{ required: true, message: '请输作者名称', trigger: 'blur' }],
+        title: [{ required: true, message: '请输文章标题', trigger: 'blur' }]
       },
-
-
+      article: {
+        editorType: 0,
+        coverImg: '',
+        isShow: 1,
+      }
     }
   },
   mounted() {
@@ -117,13 +116,16 @@ export default {
     // 封面图片上传成功
     coverImgUploadSucc(response) {
       const { success, data, message } = response
+      console.log(response)
       if (success) {
-        this.article.coverImg = data.filrUrl
+        this.article.coverImg = data.material.ossUrl
+        console.log(this.article.coverImg)
         this.$refs.uploadCom.clearFiles()
       } else {
         this.$message.error(message)
       }
     },
+
     addArticle() {
       this.$refs.articleform.validate((valid) => {
         if (valid) {
@@ -135,7 +137,7 @@ export default {
               const { success, message } = res
               if (success) {
                 // 添加成功跳转文章列表页面
-                this.$router.push({ name: 'Article' })
+                this.$router.push({ path: 'article' })
               } else {
                 this.$message.error(message)
               }

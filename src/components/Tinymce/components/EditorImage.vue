@@ -1,20 +1,13 @@
 <template>
   <div class="upload-container">
-    <el-button :style="{background:color,borderColor:color}" icon="el-icon-upload" size="mini" type="primary" @click=" dialogVisible=true">
+    <el-button :style="{ background: color, borderColor: color }" icon="el-icon-upload" size="mini" type="primary"
+      @click="dialogVisible = true">
       upload
     </el-button>
     <el-dialog :visible.sync="dialogVisible">
-      <el-upload
-        :multiple="true"
-        :file-list="fileList"
-        :show-file-list="true"
-        :on-remove="handleRemove"
-        :on-success="handleSuccess"
-        :before-upload="beforeUpload"
-        class="editor-slide-upload"
-        action="https://httpbin.org/post"
-        list-type="picture-card"
-      >
+      <el-upload :multiple="true" :file-list="fileList" :show-file-list="true" :on-remove="handleRemove"
+        :on-success="handleSuccess" :before-upload="beforeUpload" class="editor-slide-upload"
+        action="https://httpbin.org/post" list-type="picture-card">
         <el-button size="small" type="primary">
           Click upload
         </el-button>
@@ -91,7 +84,7 @@ export default {
       return new Promise((resolve, reject) => {
         const img = new Image()
         img.src = _URL.createObjectURL(file)
-        img.onload = function() {
+        img.onload = function () {
           _self.listObj[fileName] = { hasSuccess: false, uid: file.uid, width: this.width, height: this.height }
         }
         resolve(true)
@@ -104,6 +97,7 @@ export default {
 <style lang="scss" scoped>
 .editor-slide-upload {
   margin-bottom: 20px;
+
   ::v-deep .el-upload--picture-card {
     width: 100%;
   }

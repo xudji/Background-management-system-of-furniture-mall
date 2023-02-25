@@ -2,7 +2,11 @@
   <div :class="{ fullscreen: fullscreen }" class="tinymce-container" :style="{ width: containerWidth }">
     <textarea :id="tinymceId" class="tinymce-textarea" />
     <div class="editor-custom-btn-container">
-      <editorImage color="#1890ff" class="editor-upload-btn" @successCBK="imageSuccessCBK" />
+      <!-- <editorImage color="#1890ff" class="editor-upload-btn" @successCBK="imageSuccessCBK" /> -->
+      <el-button class="btn" type="primary" size="mini" icon="el-icon-upload">
+        上传图片
+        <input class="ipt-file" type="file" @change="fileChange($event)">
+      </el-button>
     </div>
   </div>
 </template>
@@ -24,7 +28,9 @@ import mix from '@/mixins'
 const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js'
 
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Tinymce',
+  // eslint-disable-next-line vue/no-unused-components
   components: { editorImage, getToken },
   props: {
     id: {
@@ -106,6 +112,26 @@ export default {
     this.destroyTinymce()
   },
   methods: {
+    // 原生标签上传图片
+    fileChange(e) {
+      let files = e.target.files
+      let fileImg = files[0]
+      let formData = new FormData()
+      formData.append('file', fileImg)
+      axios.post(this.uploadFileOss, formData, {
+        headers: this.token
+      }).then(res => {
+        const { success: succ, data, message } = res.data
+        if (succ) {
+          // 把数据回填到tinymce
+          this.imageSuccessCBK(data.material.ossUrl)
+        } else {
+
+          this.$message.err(message)
+        }
+
+      })
+    },
     init() {
       // dynamic load tinymce from cdn
       load(tinymceCDN, (err) => {
@@ -156,11 +182,11 @@ export default {
         images_upload_handler(blobInfo, success, failure, progress) {
           progress(0)
           // const token = _this.$store.getters.token;
-          var token = getToken()
+
           const formData = new FormData()
           formData.append('file', blobInfo.blob())
           axios.post(_this.uploadFileOss, formData, {
-            headers: { 'token': token }
+            headers: _this.token
           }).then(res => {
             const { success: succ, data, message } = res.data
             if (succ) {
@@ -225,8 +251,8 @@ export default {
     getContent() {
       window.tinymce.get(this.tinymceId).getContent()
     },
-    imageSuccessCBK(arr) {
-      arr.forEach(v => window.tinymce.get(this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" >`))
+    imageSuccessCBK(imgurl) {
+      window.tinymce.get(this.tinymceId).insertContent(`<img class="wscnph" src="${imgurl}" >`)
     }
   }
 }
@@ -265,5 +291,19 @@ export default {
 
 .editor-upload-btn {
   display: inline-block;
+}
+
+.btn {
+  position: relative;
+
+  .ipt-file {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+  }
 }
 </style>
