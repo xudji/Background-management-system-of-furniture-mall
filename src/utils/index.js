@@ -120,7 +120,7 @@ export function param2Obj(url) {
 *  @param {*} obj
 *  @returns
 */
-
+// 过滤空字符串
 export function filterNullParams(obj) {
   const newObj = {}
   for (const key in obj) {
@@ -129,4 +129,8 @@ export function filterNullParams(obj) {
     }
   }
   return newObj
+}
+// 初始化表单
+export function initDataOption(vm,option){
+  vm[option] = vm.$options.data()[option]
 }

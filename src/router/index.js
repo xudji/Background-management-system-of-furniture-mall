@@ -30,7 +30,27 @@ export const constantRoutes = [
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
   },
-
+  {
+    path: '/market',
+    component: Layout,
+    redirect: '/market/list',
+    name: 'Market',
+    meta: { title: '营销管理', icon: 'el-icon-folder' },
+    children: [
+      {
+        path: 'list',
+        name: 'List',
+        component: () => import('@/views/market/list/index'),
+        meta: { title: '限时活动', icon: 'el-icon-document' }
+      },
+      {
+        path: 'advertisement',
+        name: 'Advertisement',
+        component: () => import('@/views/market/advertisement/index'),
+        meta: { title: '广告列表', icon: 'el-icon-document' }
+      },
+    ]
+  },
   {
     path: '/content',
     component: Layout,
@@ -62,10 +82,28 @@ export const constantRoutes = [
         path: 'material',
         name: 'Material',
         component: () => import('@/views/content/material/index'),
-        meta: { title: '素材管理', icon: 'el-icon-set-up' }
+        meta: { title: '素材列表', icon: 'el-icon-set-up' }
       }
     ]
   },
+  {
+    path: '/order',
+    component: Layout,
+    redirect: '/order/address',
+    name: 'Order',
+    meta: { title: '订单管理', icon: 'el-icon-folder' },
+    alwaysShow: true,
+    children: [
+      {
+        path: 'address',
+        name: 'Address',
+        component: () => import('@/views/order/address/index'),
+        meta: { title: '地址管理', icon: 'el-icon-document' }
+      },
+    ]
+  },
+
+
 
   {
     path: '/form',
@@ -80,64 +118,7 @@ export const constantRoutes = [
     ]
   },
 
-  {
-    path: '/nested',
-    component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: 'Nested',
-      icon: 'nested'
-    },
-    children: [
-      {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
-          }
-        ]
-      },
-      {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        name: 'Menu2',
-        meta: { title: 'menu2' }
-      }
-    ]
-  },
+
 
   {
     path: 'external-link',
@@ -162,7 +143,6 @@ const createRouter = () => new Router({
 
 const router = createRouter()
 
-// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
