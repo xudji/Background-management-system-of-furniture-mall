@@ -102,7 +102,30 @@ export const constantRoutes = [
       },
     ]
   },
+  {
+    path: '/product',
+    component: Layout,
+    redirect: '/product/goodslist',
+    name: 'Product',
+    meta: { title: '商品管理', icon: 'el-icon-folder' },
+    alwaysShow: true,
+    children: [
+      {
+        path: 'goodslist',
+        name: 'Goodslist',
+        component: () => import('@/views/product/goodslist/index'),
+        meta: { title: '商品列表', icon: 'table' }
+      },
+      {
+        path: 'addGoods',
+        name: 'AddGoods',
+        hidden: true,
+        component: () => import('@/views/product/goodslist/Detail'),
+        meta: { title: '新增商品', icon: 'table', activeMenu: '/product/goodslist' }
 
+      },
+    ]
+  },
 
 
   {

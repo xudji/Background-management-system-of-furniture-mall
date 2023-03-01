@@ -14,9 +14,25 @@ function addressList(data) {
     data
   })
 }
+
+function setSendOne(data) {
+  return request({
+    url: `/lejuAdmin/companyAddress/setSendOne`,
+    method: 'post',
+    data
+  })
+}
+function setReceiveOne(data) {
+  return request({
+    url: `/lejuAdmin/companyAddress/setReceiveOne`,
+    method: 'post',
+    data
+  })
+}
 export {
-    saveAddress,
-    addressList
-  }
-  
-  
+  saveAddress,
+  addressList,
+  setSendOne,
+  setReceiveOne
+}
+

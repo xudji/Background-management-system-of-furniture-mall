@@ -2,112 +2,112 @@
     <div class="address-main">
         <el-card shadow="never" class="margin-30">
             <div slot="header">
-                <el-button type="primary" size="mini" @click="goAddAddress">新增</el-button>
+                <el-button type="primary" size="mini" @click="showAddAddress">新增</el-button>
 
             </div>
             <!-- card body -->
-        </el-card>
-        <!-- 对话框 -->
-        <el-dialog title="新增地址" :visible.sync="isShowDialog" width="40%" @close="handleCloseDialog">
-            <el-form :model="address" ref="form" :rules="rules" label-width="110px" size="mini">
-                <el-row :gutter="20">
-                    <el-col :span="12" :offset="0"> <el-form-item label="发货地址" prop="addressName">
-                            <el-input v-model="address.addressName"></el-input>
-                        </el-form-item></el-col>
-                    <el-col :span="12" :offset="0"> <el-form-item label="发货人姓名">
-                            <el-input v-model="address.name"></el-input>
-                        </el-form-item></el-col>
-                </el-row>
-                <el-row :gutter="20">
-                    <el-col :span="12" :offset="0"> <el-form-item label="发货人手机号">
-                            <el-input v-model="address.phone"></el-input>
-                        </el-form-item></el-col>
-                    <el-col :span="12" :offset="0">
-                        <el-form-item label="邮政编码">
-                            <el-input v-model="address.postCode"></el-input>
-                        </el-form-item></el-col>
-                </el-row>
-                <el-row :gutter="20">
-                    <el-col :span="12" :offset="0"> <el-form-item label="收货地址">
-                            <el-cascader size="large" :options="options" v-model="initCity" @change="handleChange">
-                            </el-cascader>
-                        </el-form-item></el-col>
-                    <el-col :span="12" :offset="0">
-                        <el-form-item label="详细地址">
-                            <el-input v-model="address.detailAddress"></el-input>
-                        </el-form-item></el-col>
-                </el-row>
-            </el-form>
+            <el-table :data="tableData" border style="width: 100%">
+                <el-table-column type="index" label="#" width="50">
+                </el-table-column>
+                <el-table-column prop="addressName" label="地址名称" width="120">
+                </el-table-column>
+                <el-table-column prop="sendStatus" label="默认发货地址" width="200">
+                    <template slot-scope="scope">
+                        默认发货地址： <el-switch v-model="scope.row.sendStatus" @change="changeSwitch(scope.row)">
+                        </el-switch>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="name" label="收获人姓名" width="120">
+                </el-table-column>
+                <el-table-column prop="phone" label="收货人电话" width="120">
+                </el-table-column>
+                <!-- province  city  detailAddress-->
+                <el-table-column prop="region" label="收货人地址" width="120">
+                    <template slot-scope="scope">
+                        <span> {{ scope.row.province }} {{ scope.row.city }}</span>
+                        {{ scope.row.detailAddress }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="receiveStatus" label="默认收货地址" width="200">
+                    <template slot-scope="scope">
+                        默认收货地址: <el-switch v-model="scope.row.receiveStatus">
+                        </el-switch>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="createTime" label="创建时间" width="180">
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" width="150">
+                    <template slot-scope="scope">
 
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="handleCancleDialog">取 消</el-button>
-                <el-button type="primary" @click="addAddress">确 定</el-button>
-            </span>
-        </el-dialog>
+                        <el-button type="text" style="color:red" size="small" @click="showAddAddress">编辑</el-button>
+                        <el-button type="text" size="small">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-card>
+        <!-- 第一种传props方法 -->
+        <!-- <AddressDialog :is-show="isShowDialog" /> -->
+        <!-- 第二种调用方法  this.$refs.dialogAdress.openDialog() 写个方法-->
+        <AddressDialog ref="dialogAdress" @refreshList="getAddressList" />
+
     </div>
 </template>
 
 <script>
-import { initDataOption } from '@/utils'
-import { saveAddress as saveAddressApi, addressList as addressListApi } from '@/api/order/address'
-import { regionDataPlus, CodeToText } from 'element-china-area-data'
+import AddressDialog from './Detail.vue'
+import { addressList as addressListApi, setSendOne as setSendOneApi, setReceiveOne as setReceiveOneApi } from '@/api/order/address'
 export default {
     name: 'Address',
     mixins: [],
+    components: {
+        AddressDialog
+    },
     data() {
         return {
-            options: regionDataPlus,
-            initCity: ['130000', '130300', '130302'],
             isShowDialog: false,
-            address: {
-                addressName: '郑州市中原区'
-            },
-            rules: {
-                addressName: [{ required: true, message: '请填写发货地址', trigger: 'blur' }]
-            },
+            tableData: [],
 
         }
     },
     created() {
+        this.getAddressList()
     },
     methods: {
-        handleChange(value) {
-            this.address.province = CodeToText[value[0]]
-            this.address.city = CodeToText[value[1]]
-            this.address.region = CodeToText[value[2]]
-            this.address.cityCode = value.join(',')
-        },
-        goAddAddress() {
-            this.isShowDialog = true
-        },
-        addAddress() {
-            saveAddressApi(this.address)
-                .then(res => {
-                    const { success, message } = res
-                    if (success) {
-                        this.isShowDialog = false
-                        // 重新获取数据
-                        this.getAddressList()
-                    } else {
-                        this.$message.error(message)
-                    }
-                })
-        },
-        // 取消对话框
-        handleCancleDialog() {
-            this.isShowDialog = false
-        },
-        handleCloseDialog() {
-
-            // 初始化 this.$options.data()
-            initDataOption(this, 'address')
-            initDataOption(this, 'initCity')
-            console.log(this.$refs.form)
-            this.$refs.form.resetFields()
+        showAddAddress() {
+            this.$refs.dialogAdress.openDialog()
         },
         getAddressList() {
             addressListApi().then((res) => {
-                console.log(res)
+                console.log('地址', res)
+                this.tableData = res.data.items
+            })
+        },
+        //更改默认发货
+        changeSwitch(row) {
+            const data = {
+                id: row.id,
+                sendStatus: row.sendStatus,
+            };
+            setSendOneApi(data).then(res => {
+                const { success, message, sendStatus } = res
+                if (success) {
+                    // 调用表格数据 
+
+                    this.getAddressList();
+                } else {
+                    this.$message.error(message);
+                    // 调用表格数据 
+                    this.getAddressList();
+                }
+                this.loading = false;
+            }).catch({
+
+            });
+        },
+        //更改默认收货
+        setReceiveOne() {
+            setReceiveOneApi().then((res) => {
+
             })
         }
     },
