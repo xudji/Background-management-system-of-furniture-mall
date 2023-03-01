@@ -13,7 +13,8 @@
                 </el-table-column>
                 <el-table-column prop="sendStatus" label="默认发货地址" width="200">
                     <template slot-scope="scope">
-                        默认发货地址： <el-switch v-model="scope.row.sendStatus" @change="changeSwitch(scope.row)">
+                        默认发货地址： <el-switch v-model="scope.row.sendStatus" :active-value="1" :inactive-value="0"
+                            @change="changeSwitch(scope.row)">
                         </el-switch>
                     </template>
                 </el-table-column>
@@ -24,13 +25,13 @@
                 <!-- province  city  detailAddress-->
                 <el-table-column prop="region" label="收货人地址" width="120">
                     <template slot-scope="scope">
-                        <span> {{ scope.row.province }} {{ scope.row.city }}</span>
+                        <span> {{ ` ${scope.row.province} ${scope.row.city}` }}</span>
                         {{ scope.row.detailAddress }}
                     </template>
                 </el-table-column>
                 <el-table-column prop="receiveStatus" label="默认收货地址" width="200">
                     <template slot-scope="scope">
-                        默认收货地址: <el-switch v-model="scope.row.receiveStatus">
+                        默认收货地址: <el-switch v-model="scope.row.receiveStatus" :active-value="1" :inactive-value="0">
                         </el-switch>
                     </template>
                 </el-table-column>
@@ -85,17 +86,18 @@ export default {
         //更改默认发货
         changeSwitch(row) {
             const data = {
+                // 传入要修改的id
                 id: row.id,
                 sendStatus: row.sendStatus,
-            };
+            };  // 
             setSendOneApi(data).then(res => {
-                const { success, message, sendStatus } = res
+                const { success } = res
                 if (success) {
-                    // 调用表格数据 
-
+                    // 调用表格数据,刷新数据,数据驱动视图,data => ui
                     this.getAddressList();
+                    this.$message.success('修改默认发货地址成功');
                 } else {
-                    this.$message.error(message);
+                    this.$message.error('修改默认发货地址成功');
                     // 调用表格数据 
                     this.getAddressList();
                 }
