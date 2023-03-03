@@ -13,8 +13,7 @@
                 </el-table-column>
                 <el-table-column prop="sendStatus" label="默认发货地址" width="200">
                     <template slot-scope="scope">
-                        默认发货地址： <el-switch v-model="scope.row.sendStatus" :active-value="1" :inactive-value="0"
-                            @change="changeSwitch(scope.row)">
+                        默认发货地址： <el-switch v-model="scope.row.sendStatus" @change="changeSwitch(scope.row)">
                         </el-switch>
                     </template>
                 </el-table-column>

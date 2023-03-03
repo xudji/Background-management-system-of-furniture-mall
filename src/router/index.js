@@ -35,19 +35,19 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/market/list',
     name: 'Market',
-    meta: { title: '营销管理', icon: 'el-icon-folder' },
+    meta: { title: '营销管理', icon: 'el-icon-coin' },
     children: [
       {
         path: 'list',
         name: 'List',
         component: () => import('@/views/market/list/index'),
-        meta: { title: '限时活动', icon: 'el-icon-document' }
+        meta: { title: '限时活动', icon: 'el-icon-odometer' }
       },
       {
         path: 'advertisement',
         name: 'Advertisement',
         component: () => import('@/views/market/advertisement/index'),
-        meta: { title: '广告列表', icon: 'el-icon-document' }
+        meta: { title: '广告列表', icon: 'el-icon-discount' }
       },
     ]
   },
@@ -91,14 +91,33 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/order/address',
     name: 'Order',
-    meta: { title: '订单管理', icon: 'el-icon-folder' },
+    meta: { title: '订单管理', icon: 'el-icon-receiving' },
     alwaysShow: true,
     children: [
       {
         path: 'address',
         name: 'Address',
         component: () => import('@/views/order/address/index'),
-        meta: { title: '地址管理', icon: 'el-icon-document' }
+        meta: { title: '地址管理', icon: 'el-icon-place' }
+      },
+      {
+        path: 'orderList',
+        name: 'OrderList',
+        component: () => import('@/views/order/orderList/index'),
+        meta: { title: '订单列表', icon: 'el-icon-document-checked' }
+      },
+      {
+        path: 'orderDetail/:orderId',
+        name: 'OrderDetail',
+        hidden: true,
+        component: () => import('@/views/order/orderList/Detail'),
+        meta: { title: '订单详情', icon: 'el-icon-document-checked', activeMenu: '/order/orderlist' }
+      },
+      {
+        path: 'returnOrderList',
+        name: 'ReturnOrderList',
+        component: () => import('@/views/order/returnList/index'),
+        meta: { title: '退单列表', icon: '支付宝' }
       },
     ]
   },
@@ -107,7 +126,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/product/goodslist',
     name: 'Product',
-    meta: { title: '商品管理', icon: 'el-icon-folder' },
+    meta: { title: '商品管理', icon: 'el-icon-money' },
     alwaysShow: true,
     children: [
       {
@@ -140,9 +159,6 @@ export const constantRoutes = [
       }
     ]
   },
-
-
-
   {
     path: 'external-link',
     component: Layout,
