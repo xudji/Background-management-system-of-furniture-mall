@@ -27,9 +27,32 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '首页', icon: 'dashboard' }
     }]
   },
+  {
+    path: '/auth',
+    component: Layout,
+    redirect: '/auth/source',
+    name: 'auth',
+    meta: { title: '权限管理', icon: 'el-icon-turn-off' },
+    alwaysShow: true,
+    children: [
+      {
+        path: 'roles',
+        name: 'Roles',
+        component: () => import('@/views/auth/roles/index'),
+        meta: { title: '角色管理', icon: 'el-icon-user' }
+      },
+      {
+        path: 'source',
+        name: 'Source',
+        component: () => import('@/views/auth/source/index'),
+        meta: { title: '资源管理', icon: 'el-icon-connection' }
+      }
+    ]
+  },
+
   {
     path: '/market',
     component: Layout,
@@ -119,6 +142,13 @@ export const constantRoutes = [
         component: () => import('@/views/order/returnList/index'),
         meta: { title: '退单列表', icon: '支付宝' }
       },
+      {
+        path: 'returnOrderDetail/:returnId',
+        name: 'ReturnOrderDetail',
+        hidden: true,
+        component: () => import('@/views/order/returnList/Detail'),
+        meta: { title: '退单详情', icon: '支付宝', activeMenu: '/order/returnOrderDetail' }
+      },
     ]
   },
   {
@@ -136,39 +166,25 @@ export const constantRoutes = [
         meta: { title: '商品列表', icon: 'table' }
       },
       {
+        path: 'category',
+        name: 'Category',
+        component: () => import('@/views/product/category/index'),
+        meta: { title: '商品分类', icon: 'el-icon-collection-tag' }
+      },
+      {
         path: 'addGoods',
         name: 'AddGoods',
         hidden: true,
         component: () => import('@/views/product/goodslist/Detail'),
-        meta: { title: '新增商品', icon: 'table', activeMenu: '/product/goodslist' }
+        meta: { title: '新增商品', icon: 'el-icon-folder-add', activeMenu: '/product/goodslist' }
 
       },
     ]
   },
 
 
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
-      }
-    ]
-  },
+
+
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

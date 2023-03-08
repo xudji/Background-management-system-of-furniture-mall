@@ -6,9 +6,9 @@
         <el-step title="待付款" :description="orderBase.createTime"></el-step>
         <el-step title="待发货" :description="orderBase.paymentTime"></el-step>
         <el-step title="已发货" :description="orderBase.deliveryTime"></el-step>
-        <el-step title="已完成" :description="orderBase.receiveTime"></el-step>
-        <el-step title="退货" description="这段就没那么长了"></el-step>
-        <el-step title="无效订单" description="这段就没那么长了"></el-step>
+        <el-step v-if="orderBase.status !== 4" title="已完成" :description="orderBase.receiveTime"></el-step>
+        <el-step v-if="orderBase.status !== 3" title="退货" description="退货时间"></el-step>
+        <el-step v-if="orderBase.status !== 3 && orderBase.status !== 4" title="无效订单" description="订单无效"></el-step>
       </el-steps>
       <!-- 订单信息 -->
       <div>
@@ -106,6 +106,7 @@
       </div>
       <!-- 发货表单 -->
       <div v-if="orderBase.status == 1">
+        发货表单
         <el-form :model="form" ref="form" :rules="rules" label-width="80px" size="normal">
           <el-row :gutter="20">
             <el-col :span="6" :offset="0">
@@ -133,6 +134,9 @@
         </el-form>
       </div>
       <!-- 物流信息 -->
+      <div v-if="orderBase.status == 2 || orderBase.status == 3">
+        物流信息</div>
+    </el-card>
   </div>
 </template>
 <script>
@@ -197,29 +201,26 @@ export default {
   methods: {
     //确认发货
     sendDone() {
-      this.$refs.form.validate((valid) => {
-        if (valid) {
-          sendDoneApi({
-            orderId: this.id,
-            deliverySn: this.form.deliverySn,
-            deliveryCompany: this.form.deliveryCompany
-          })
-            .then((res) => {
-              console.log(object)
-              if (res.success) {
-                this.$message.success('确定发货成功')
-                this.getOrderDetail()
-              } else {
-                this.$message.error('确定发货失败')
-              }
-            })
-            .catch((res) => {
-              this.$message.error('确认发货失败')
-            })
-        } else {
-          this.$message.warning('请填写必要信息')
-        }
+
+
+      sendDoneApi({
+        orderId: this.orderId,
+        deliverySn: this.form.deliverySn,
+        deliveryCompany: this.form.deliveryCompany
       })
+        .then((res) => {
+          const { success } = res
+          if (success) {
+            this.$message.success('确定发货成功')
+            this.getOrderDetail()
+          } else {
+            this.$message.error('确定发货失败')
+          }
+        })
+        .catch((res) => {
+          this.$message.error('确认发货失败')
+        })
+
     },
     getOrderDetail() {
       orderDetailApi(this.orderId)

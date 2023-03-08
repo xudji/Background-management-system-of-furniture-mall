@@ -25,12 +25,17 @@ module.exports = {
     },
     // 开发阶段绕过跨域问题c
     proxy: {
-      // 以/lejuAdmin开头的相对路径都代理到target地址
-      '/lejuAdmin': {
+      // 以/lejuAdmin开头的相对路径都代理到target地址 不能有空格|
+      '/(lejuAdmin|admin)': {
         // 是否支持跨域
         target: defaultSettings.host,
         changeOrigin: true
-      }
+      },
+      /* '/admin': {
+        // 是否支持跨域
+        target: defaultSettings.host,
+        changeOrigin: true
+      } */
     },
     // 此处的before改成after 修改为after 如果是before会优先走moke数据 不走代理了 真实项目下面代码可以删除
     after: require('./mock/mock-server.js')

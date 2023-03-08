@@ -82,14 +82,14 @@ export function formatTime(time, option) {
   } else {
     return (
       d.getMonth() +
-			1 +
-			'月' +
-			d.getDate() +
-			'日' +
-			d.getHours() +
-			'时' +
-			d.getMinutes() +
-			'分'
+      1 +
+      '月' +
+      d.getDate() +
+      '日' +
+      d.getHours() +
+      '时' +
+      d.getMinutes() +
+      '分'
     )
   }
 }
@@ -131,6 +131,6 @@ export function filterNullParams(obj) {
   return newObj
 }
 // 初始化表单
-export function initDataOption(vm,option){
+export function initDataOption(vm, option) {
   vm[option] = vm.$options.data()[option]
 }
