@@ -80,7 +80,6 @@
           @size-change="handleSizeChange" @current-change="handleCurrentChange" />
       </el-card>
     </el-card>
-    <button type="type">你好</button>
   </div>
 </template>
 

@@ -37,7 +37,7 @@
         </el-table-column>
         <el-table-column label="订单编号" prop="orderSn">
         </el-table-column>
-        <el-table-column label="退单状态" prop="status">
+        <el-table-column label="退单状态" prop="status" width="100px" align="center">
           <template slot-scope="scope">
             <el-button v-if="scope.row.status == 0" type="danger" size="mini">待处理</el-button>
             <el-button v-if="scope.row.status == 1" type="warning" size="mini">退货中</el-button>
@@ -72,16 +72,21 @@
         </el-table-column>
       </el-table>
 
+      <el-pagination style="margin-top: 10px; text-align: right;" :page-size="pagniationParams.limit"
+        :total="pagniationParams.totalNum" layout="total, sizes, prev, pager, next, jumper"
+        :page-sizes="pagniationParams.pageSizes" :current-page.sync="pagniationParams.start"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+
     </el-card>
-
-
   </div>
 </template>
 
 <script>
 import { findReturnApply as findReturnApplyApi } from '@/api/order/returnOrder'
+import mix from '@/mixins'
 export default {
   name: 'ReturnOrderList',
+  mixins: [mix],
   data() {
     return {
       returnOrderList: [],
@@ -113,17 +118,28 @@ export default {
       })
     },
     findReturnApply() {
-      findReturnApplyApi(1, 10, this.form)
+      findReturnApplyApi(this.pagniationParams.start, this.pagniationParams.limit, this.form)
         .then(res => {
           console.log(res)
           const { success, data, message } = res
           if (success) {
             this.returnOrderList = data.rows
+            this.pagniationParams.totalNum = data.total
           }
           else {
             this.$message.error(message)
           }
         })
+    },
+    handleSizeChange(val) {
+      this.limit = val
+      this.start = 1
+      this.findReturnApply()
+    },
+    // 页面改变
+    handleCurrentChange(val) {
+      this.start = val
+      this.findReturnApply()
     }
   }
 }

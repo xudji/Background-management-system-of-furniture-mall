@@ -8,7 +8,7 @@
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" > -->
-          <span>{{ username }}</span>
+          欢迎管理员: <span>{{ username }}</span>
           <img class="user-avatar" :src="avatar" alt="">
           <i class="el-icon-caret-bottom" />
         </div>
@@ -16,6 +16,11 @@
           <router-link to="/">
             <el-dropdown-item>
               首页
+            </el-dropdown-item>
+          </router-link>
+          <router-link to="/user">
+            <el-dropdown-item>
+              个人中心
             </el-dropdown-item>
           </router-link>
           <el-dropdown-item divided @click.native="logout">
@@ -65,7 +70,7 @@ export default {
 
 <style lang="scss" scoped>
 .navbar {
-  height: 50px;
+  height: 52px;
   overflow: hidden;
   position: relative;
   background: #fff;
@@ -130,11 +135,17 @@ export default {
         display: flex;
         align-items: center;
 
+        span {
+          font-size: 18px;
+          margin-right: 16px;
+        }
+
         .user-avatar {
           cursor: pointer;
           width: 40px;
           height: 40px;
           border-radius: 10px;
+          margin-bottom: 8px;
         }
 
         .el-icon-caret-bottom {

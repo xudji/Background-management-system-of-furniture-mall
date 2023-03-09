@@ -69,11 +69,22 @@
           <el-table-column label="支付方式" align="center">
             <template slot-scope="scope">
             <!--  <svg-icon v-if="scope.row.payType == 2" icon-class="微信" class-name='custom-class' />
-              <svg-icon v-if="scope.row.payType == 1" icon-class="支付宝" class-name='custom-class' />
-                                                                                          <el-button v-if="scope.row.payType == 0" size="mini">未支付</el-button> -->
+                                                                            <svg-icon v-if="scope.row.payType == 1" icon-class="支付宝" class-name='custom-class' />                       <el-button v-if="scope.row.payType == 0" size="mini">未支付</el-button> -->
               <el-tag v-if="scope.row.payType == 2" type="success" size="mini" effect="dark">微信</el-tag>
               <el-tag v-if="scope.row.payType == 1" type="primary" size="mini" effect="dark">支付宝</el-tag>
               <el-tag v-if="scope.row.payType == 0" type="info" size="mini" effect="dark">未支付</el-tag>
+
+            </template>
+          </el-table-column>
+          <el-table-column label="订单状态" align="center">
+            <template slot-scope="scope">
+
+              <el-tag v-if="scope.row.status == 0" size="mini" type="danger" effect="dark">待付款</el-tag>
+              <el-tag v-if="scope.row.status == 1" size="mini" type="warning" effect="dark">待发货</el-tag>
+              <el-tag v-if="scope.row.status == 2" type="primary" size="mini" effect="dark">已发货</el-tag>
+              <el-tag v-if="scope.row.status == 3" type="success" size="mini" effect="dark">已完成</el-tag>
+              <el-tag v-if="scope.row.status == 4" type="danger" size="mini" effect="dark">退货</el-tag>
+              <el-tag v-if="scope.row.status == 5" type="info" size="mini" effect="dark">无效订单</el-tag>
 
             </template>
           </el-table-column>
@@ -82,9 +93,11 @@
           </el-table-column>
           <el-table-column label="用户账号" prop="memberUsername">
           </el-table-column>
-          <el-table-column label="订单类型" prop="orderType">
+          <el-table-column label="订单类型">
             <template slot-scope="scope">
-              <el-button v-if="scope.row.deliveryCompany" size="mini">{{ scope.row.deliveryCompany }}</el-button>
+              <el-tag v-if="scope.row.orderType == 1" type="warning" size="normal">秒杀订单</el-tag>
+              <el-tag v-else type="success" size="normal">正常订单</el-tag>
+
             </template>
           </el-table-column>
           <el-table-column label="备注" prop="note">
@@ -100,7 +113,10 @@
         </el-table>
 
       </div>
-      <!-- card body -->
+      <el-pagination style="margin-top: 10px; text-align: right;" :page-size="pagniationParams.limit"
+        :total="pagniationParams.totalNum" layout="total, sizes, prev, pager, next, jumper"
+        :page-sizes="pagniationParams.pageSizes" :current-page.sync="pagniationParams.start"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </el-card>
 
   </div>
@@ -177,6 +193,16 @@ export default {
         })
 
 
+    },
+    handleSizeChange(val) {
+      this.limit = val
+      this.start = 1
+      this.getOrderList()
+    },
+    // 页面改变
+    handleCurrentChange(val) {
+      this.start = val
+      this.getOrderList()
     }
   }
 }

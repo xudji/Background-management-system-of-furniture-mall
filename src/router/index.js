@@ -33,16 +33,34 @@ export const constantRoutes = [
   {
     path: '/auth',
     component: Layout,
-    redirect: '/auth/source',
+    redirect: '/auth/roles',
     name: 'auth',
     meta: { title: '权限管理', icon: 'el-icon-turn-off' },
     alwaysShow: true,
     children: [
       {
+        path: 'account',
+        name: 'Account',
+        component: () => import('@/views/auth/account/index'),
+        meta: {
+          title: '账号管理', icon: 'el-icon-s-custom',
+        },
+      },
+      {
         path: 'roles',
         name: 'Roles',
         component: () => import('@/views/auth/roles/index'),
-        meta: { title: '角色管理', icon: 'el-icon-user' }
+        meta: {
+          title: '角色管理', icon: 'el-icon-s-operation',
+        },
+
+      },
+      {
+        path: 'rolesForm',
+        name: 'RolesForm',
+        hidden: true,
+        component: () => import('@/views/auth/roles/detail'),
+        meta: { title: '编辑角色', icon: 'el-icon-odometer', }
       },
       {
         path: 'source',
@@ -181,8 +199,28 @@ export const constantRoutes = [
       },
     ]
   },
-
-
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/userPage',
+    name: 'User',
+    meta: { title: '个人中心', icon: 'el-icon-user-solid' },
+    alwaysShow: true,
+    children: [
+      {
+        path: 'userPage',
+        name: 'UserPage',
+        component: () => import('@/views/user/userPage/index'),
+        meta: { title: '个人主页', icon: 'el-icon-user' }
+      },
+      {
+        path: 'userSet',
+        name: 'UserSet',
+        component: () => import('@/views/user/userSet/index'),
+        meta: { title: '个人设置', icon: 'el-icon-setting' }
+      }
+    ]
+  },
 
 
 

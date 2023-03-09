@@ -344,7 +344,7 @@ export default {
   .el-main {
     color: #8D9BC1;
     font-size: 24px;
-
+    overflow: hidden;
 
     i {
       font-style: normal;
@@ -380,12 +380,16 @@ export default {
       margin-top: 20px;
       width: 350px;
       height: 250px;
+      position: absolute;
+      z-index: 10;
     }
 
     .pic {
       margin-top: 0px;
       width: 300px;
       height: 300px;
+      position: absolute;
+      z-index: 10;
     }
 
   }
@@ -412,10 +416,16 @@ export default {
     //设置表的外边框
     .el-table {
       border: 0px solid #ccc;
+      overflow: hidden;
     }
 
     .el-table::before {
       background-color: #8D9BC1;
+    }
+
+    ::v-deep .el-table__body-wrapper::-webkit-scrollbar {
+      /*width: 0;宽度为0隐藏*/
+      display: none;
     }
 
     ::v-deep .el-table__body tr,
@@ -481,7 +491,7 @@ export default {
     }
   }
 
- // .el-footer {}
+  // .el-footer {}
 
   .full {
     opacity: 0.5;
@@ -534,7 +544,8 @@ export default {
     width: 300px;
     height: 300px;
     background: linear-gradient(315deg, #19233c, #1b263e, );
-
+    position: absolute;
+    z-index: 10;
   }
 
 
@@ -545,7 +556,6 @@ export default {
     bottom: 10px;
     width: 100%;
     height: 40%;
-    border: 1px solid red;
     z-index: 0;
   }
 

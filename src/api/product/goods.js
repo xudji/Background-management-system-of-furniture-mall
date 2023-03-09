@@ -1,25 +1,35 @@
 
 
 import request from '@/api/request'
-function findBrandByPage(start, limit, data) {
-    return request({
-        url: `/lejuAdmin/brand/findBrandByPage/${start}/${limit}`,
-        method: 'get',
-        data
+function productsByPage(start, limit, data) {
+  return request({
+    url: `/lejuAdmin/product/productsByPage/${start}/${limit}`,
+    method: 'post',
+    data
 
-    })
+  })
 }
 function productSkusDetail(productId, data) {
-    return request({
-        url: `lejuAdmin/product/productSkusDetail/${productId}`,
-        method: 'get',
-        data
+  return request({
+    url: `lejuAdmin/product/productSkusDetail/${productId}`,
+    method: 'get',
+    data
 
-    })
+  })
+}
+function addProductAndSkus(data) {
+  return request({
+    url: `/lejuAdmin/product/addProductAndSkus`,
+    method: 'post',
+    data
+
+  })
 }
 
-///lejuAdmin/product/productSkusDetail/{productId}
+
+
 export {
-    findBrandByPage,
-    productSkusDetail
+  productsByPage,
+  productSkusDetail,
+  addProductAndSkus
 }

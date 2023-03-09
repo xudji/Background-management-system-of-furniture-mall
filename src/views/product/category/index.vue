@@ -1,7 +1,32 @@
 <!--  -->
 <template>
   <div class="product-category-main">
+
+
+
     <el-card shadow="never" class="margin-30">
+      <div slot="header">
+        <span>分类管理</span>
+      </div>
+
+
+
+      <h4>乐居分类:</h4>
+      <el-card shadow="never">
+        <el-row :gutter="20">
+          <el-col :span="6" :offset="0" v-for="item in list">
+            <el-card shadow="never">
+              <div slot="header">
+                <span>{{ item.categoryName }}</span>
+              </div>
+              <el-image style="width: 100%; height: 200px" :src="item.srcList" fit="cover"></el-image>
+            </el-card>
+          </el-col>
+
+        </el-row>
+      </el-card>
+
+      <h4>全部分类:</h4>
       <el-table :data="categoryList" border stripe row-key="id" :tree-props="{ children: 'arr' }">
         <el-table-column label="菜单名称" prop="name">
         </el-table-column>
@@ -45,7 +70,30 @@ export default {
   name: 'Category',
   data() {
     return {
-      categoryList: []
+      categoryList: [],
+      list: [
+        {
+          categoryName: '创意',
+          srcList: 'https://bufan-apitown.oss-cn-beijing.aliyuncs.com/bftec/20201118203732237creativity.png',
+        },
+        {
+          categoryName: '风格',
+          srcList: 'https://bufan-apitown.oss-cn-beijing.aliyuncs.com/bftec/20201113162204152fengge.png',
+        },
+        {
+          categoryName: '饰品',
+          srcList: 'https://bufan-apitown.oss-cn-beijing.aliyuncs.com/bftec/20201113162219971zhuangshipin.png',
+        },
+        {
+          categoryName: '灯具',
+          srcList: 'https://bufan-apitown.oss-cn-beijing.aliyuncs.com/bftec/20201118165103745dengju.png',
+        },
+
+      ],
+
+
+
+
     };
   },
 
@@ -55,6 +103,7 @@ export default {
 
   created() {
     this.getAllCategory()
+
   },
 
   //mounted: {},

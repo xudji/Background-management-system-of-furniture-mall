@@ -8,7 +8,7 @@ export default {
         totalNum: 0,
         pageSizes: [10, 20, 30, 40]
       },
-     
+
     }
   },
   computed: {

@@ -21,8 +21,13 @@
               style="display: block; margin: 0 auto; width: 100px; height: 100px;"></el-image>
             <el-button type="danger" size="small" @click="deleteMaterialById(item.id)">删除</el-button>
           </el-card>
+
         </el-col>
       </el-row>
+      <el-pagination style="margin-top: 10px; text-align: right;" :page-size="pagniationParams.limit"
+        :total="pagniationParams.total" layout="total, sizes, prev, pager, next, jumper"
+        :page-sizes="pagniationParams.pageSizes" :current-page.sync="pagniationParams.start"
+        @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </el-card>
   </div>
 </template>
@@ -57,8 +62,9 @@ export default {
         .then(res => {
           const { success, data, message } = res
           if (success) {
+            const { total } = data
             this.list = data.rows
-            this.pagniationParams.total = data.total
+            this.pagniationParams.total = total
             // map遍历对象返回一个结果，返回一个数组
             this.previewSrcList = data.rows.map(ele =>
               ele.ossUrl)
@@ -70,10 +76,20 @@ export default {
     // 删除
     deleteMaterialById(id) {
 
+    },
+    handleSizeChange(val) {
+      this.limit = val
+      this.start = 1
+      this.getMaterialList()
+    },
+    // 页面改变
+    handleCurrentChange(val) {
+      this.start = val
+      this.getMaterialList()
     }
-
   }
 }
+
 </script>
 
 <style lang="scss" scoped>
