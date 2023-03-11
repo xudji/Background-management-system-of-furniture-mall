@@ -5,10 +5,11 @@ function findAllPermissions() {
     method: 'get',
   })
 }
-function findRolesByPage(start, limit) {
+function findRolesByPage(start, limit, data) {
   return request({
     url: `/admin/sysAuth/role/findRolesByPage/${start}/${limit}`,
     method: 'get',
+    data
   })
 }
 function removeRole(id) {
@@ -36,7 +37,7 @@ function updateRolePermissions(data) {
 function findAllRoles() {
   return request({
     url: `/admin/sysAuth/role/findAllRoles`,
-    method: 'get'
+    method: 'GET'
   })
 }
 function getRolePermissions(id) {

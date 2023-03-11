@@ -1,18 +1,19 @@
 <template>
   <div class="user-main">
-    <el-card class="search-bar card" shadow="never">
+    <el-card class="search-bar card margin-30" shadow="never">
       <el-form ref="searchForm" :model="search" label-width="80px" :inline="false" size="mini">
         <el-row :gutter="20">
-          <el-col :span="6" :offset="0">
-            <el-form-item label="昵称" size="mini" prop="nickName">
-              <el-input v-model="search.nickName" placeholder="昵称模糊搜索" size="mini" clearable />
-            </el-form-item>
-          </el-col>
           <el-col :span="6" :offset="0">
             <el-form-item label="用户名" size="mini" prop="username">
               <el-input v-model="search.username" placeholder="用户名模糊搜索" size="mini" clearable />
             </el-form-item>
           </el-col>
+          <el-col :span="6" :offset="0">
+            <el-form-item label="昵称" size="mini" prop="nickName">
+              <el-input v-model="search.nickName" placeholder="昵称模糊搜索" size="mini" clearable />
+            </el-form-item>
+          </el-col>
+
         </el-row>
         <el-row :gutter="20">
           <el-col :span="6" :offset="18">
@@ -24,7 +25,7 @@
     </el-card>
 
     <div class="container">
-      <el-card class="card" shadow="never">
+      <el-card class="card margin-30" shadow="never">
         <div slot="header">
           <el-button type="primary" size="small" @click="goAdd">新增</el-button>
         </div>
@@ -52,18 +53,18 @@
           :total="page.totalCount" @size-change="sizeChange" @current-change="currentChange" />
       </el-card>
     </div>
-    <!-- <UserForm ref="userForm" :role-list="roleList" @refresh="getUserList" /> -->
+    <UserForm ref="userForm" :role-list="roleList" @refresh="getUserList" />
   </div>
 </template>
 
 <script>
 import userApi from '@/api/auth/user'
-import roleApi from '@/api/auth/index'
-
+import UserForm from '../addUser/addUser.vue'
+import { findAllRoles } from '@/api/auth/index'
 export default {
   name: 'AuthUser',
   components: {
-
+    UserForm
   },
   data() {
     return {
@@ -87,8 +88,9 @@ export default {
   },
   methods: {
     getRoleList() {
-      roleApi.findAllRoles()
+      findAllRoles()
         .then(res => {
+
           this.roleList = res.data.items
         })
     },

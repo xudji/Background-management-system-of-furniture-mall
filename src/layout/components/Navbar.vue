@@ -29,6 +29,11 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+
+    <div v-if="titleShow">
+      <Title></Title>
+    </div>
+
   </div>
 </template>
 
@@ -36,13 +41,20 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import Title from '@/components/Breadcrumb/title1.vue'
 import { getUserInfo, removeUserInfo, removeToken } from '@/utils/myAuth'
 // import { remove } from 'js-cookie'
 
 export default {
+  data() {
+    return {
+      titleShow: true
+    };
+  },
   components: {
     Breadcrumb,
-    Hamburger
+    Hamburger,
+    Title
   },
   computed: {
     ...mapGetters([
@@ -55,6 +67,18 @@ export default {
       return getUserInfo().username
     }
   },
+  created() {
+    if (this.$route.path === "/dashboard")
+      this.titleShow = false;
+  },
+  mounted() {
+  },
+  watch: {
+    $route(r) {
+      this.titleShow = r.path !== '/dashboard'
+    }
+  },
+
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
@@ -66,6 +90,7 @@ export default {
     }
   }
 }
+
 </script>
 
 <style lang="scss" scoped>
@@ -92,6 +117,8 @@ export default {
   .breadcrumb-container {
     float: left;
   }
+
+
 
   .right-menu {
     float: right;
@@ -136,8 +163,8 @@ export default {
         align-items: center;
 
         span {
-          font-size: 18px;
-          margin-right: 16px;
+
+          margin-right: 6px;
         }
 
         .user-avatar {

@@ -37,8 +37,7 @@
 </template>
 
 <script>
-import permissionApi from '@/api/auth/permission'
-import roleApi from '@/api/auth/index'
+import roleApi, { getRolePermissions } from '@/api/auth/index'
 export default {
   name: 'AuthUser',
   props: {
@@ -76,7 +75,7 @@ export default {
       // 如果有id 是编辑
       if (id) {
         this.treeLoad = true
-        roleApi.getRolePermissions(id)
+        getRolePermissions(id)
           .then(res => {
             if (res.success) {
               if (res.data.role.permissionIds) {

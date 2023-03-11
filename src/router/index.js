@@ -7,17 +7,7 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 export const constantRoutes = [
-  {
-    path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
-  },
 
-  {
-    path: '/404',
-    component: () => import('@/views/404'),
-    hidden: true
-  },
 
   {
     path: '/',
@@ -27,76 +17,18 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '首页', icon: 'dashboard' }
+      meta: { title: '首页', icon: 'dashboard', }
     }]
   },
-  {
-    path: '/auth',
-    component: Layout,
-    redirect: '/auth/roles',
-    name: 'auth',
-    meta: { title: '权限管理', icon: 'el-icon-turn-off' },
-    alwaysShow: true,
-    children: [
-      {
-        path: 'account',
-        name: 'Account',
-        component: () => import('@/views/auth/account/index'),
-        meta: {
-          title: '账号管理', icon: 'el-icon-s-custom',
-        },
-      },
-      {
-        path: 'roles',
-        name: 'Roles',
-        component: () => import('@/views/auth/roles/index'),
-        meta: {
-          title: '角色管理', icon: 'el-icon-s-operation',
-        },
 
-      },
-      {
-        path: 'rolesForm',
-        name: 'RolesForm',
-        hidden: true,
-        component: () => import('@/views/auth/roles/detail'),
-        meta: { title: '编辑角色', icon: 'el-icon-odometer', }
-      },
-      {
-        path: 'source',
-        name: 'Source',
-        component: () => import('@/views/auth/source/index'),
-        meta: { title: '资源管理', icon: 'el-icon-connection' }
-      }
-    ]
-  },
 
-  {
-    path: '/market',
-    component: Layout,
-    redirect: '/market/list',
-    name: 'Market',
-    meta: { title: '营销管理', icon: 'el-icon-coin' },
-    children: [
-      {
-        path: 'list',
-        name: 'List',
-        component: () => import('@/views/market/list/index'),
-        meta: { title: '限时活动', icon: 'el-icon-odometer' }
-      },
-      {
-        path: 'advertisement',
-        name: 'Advertisement',
-        component: () => import('@/views/market/advertisement/index'),
-        meta: { title: '广告列表', icon: 'el-icon-discount' }
-      },
-    ]
-  },
-  {
+
+  { // 内容管理
     path: '/content',
     component: Layout,
     redirect: '/content/article',
     name: 'Content',
+    alwaysShow: true, // 当子路由只有一个时候,也让他展开
     meta: { title: '内容管理', icon: 'el-icon-folder' },
     children: [
       {
@@ -127,7 +59,7 @@ export const constantRoutes = [
       }
     ]
   },
-  {
+  {  //订单管理
     path: '/order',
     component: Layout,
     redirect: '/order/address',
@@ -190,6 +122,12 @@ export const constantRoutes = [
         meta: { title: '商品分类', icon: 'el-icon-collection-tag' }
       },
       {
+        path: 'brand',
+        name: 'Brand',
+        component: () => import('@/views/product/brand/index'),
+        meta: { title: '品牌管理', icon: 'el-icon-present sub-el-icon' }
+      },
+      {
         path: 'addGoods',
         name: 'AddGoods',
         hidden: true,
@@ -197,6 +135,78 @@ export const constantRoutes = [
         meta: { title: '新增商品', icon: 'el-icon-folder-add', activeMenu: '/product/goodslist' }
 
       },
+    ]
+  },
+  {
+    path: '/market',
+    component: Layout,
+    redirect: '/market/list',
+    name: 'Market',
+    meta: { title: '营销管理', icon: 'el-icon-coin' },
+    children: [
+      {
+        path: 'list',
+        name: 'List',
+        component: () => import('@/views/market/list/index'),
+        meta: { title: '限时活动', icon: 'el-icon-odometer' }
+      },
+      {
+        path: 'advertisement',
+        name: 'Advertisement',
+        component: () => import('@/views/market/advertisement/index'),
+        meta: { title: '广告列表', icon: 'el-icon-discount' }
+      },
+    ]
+  },
+  { //权限管理
+    path: '/auth',
+    component: Layout,
+    redirect: '/auth/roles',
+    name: 'auth',
+    meta: { title: '权限管理', icon: 'el-icon-turn-off' },
+    alwaysShow: true,
+    children: [
+      {
+        path: 'account',
+        name: 'Account',
+        component: () => import('@/views/auth/account/index'),
+        meta: {
+          title: '账号管理', icon: 'el-icon-s-custom',
+        },
+      },
+      {
+        path: 'roles',
+        name: 'Roles',
+        component: () => import('@/views/auth/roles/index'),
+        meta: {
+          title: '角色管理', icon: 'el-icon-s-operation',
+        },
+      },
+      {
+        path: 'source',
+        name: 'Source',
+        component: () => import('@/views/auth/source/index'),
+        meta: { title: '资源管理', icon: 'el-icon-connection' },
+      },
+    ]
+  },
+  {
+    path: '/logon',
+    component: Layout,
+    redirect: '/logon',
+    name: 'logon',
+    meta: { title: '注册用户管理', icon: 'el-icon-s-custom sub-el-icon' },
+    alwaysShow: true,
+    children: [
+      {
+        path: 'logonList',
+        name: 'LogonList',
+        component: () => import('@/views/logon/index'),
+        meta: {
+          title: '用户列表', icon: 'el-icon-notebook-2',
+        },
+      },
+
     ]
   },
   {
@@ -213,6 +223,7 @@ export const constantRoutes = [
         component: () => import('@/views/user/userPage/index'),
         meta: { title: '个人主页', icon: 'el-icon-user' }
       },
+
       {
         path: 'userSet',
         name: 'UserSet',
@@ -222,7 +233,17 @@ export const constantRoutes = [
     ]
   },
 
+  {
+    path: '/login',
+    component: () => import('@/views/login/index'),
+    hidden: true
+  },
 
+  {
+    path: '/404',
+    component: () => import('@/views/404'),
+    hidden: true
+  },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

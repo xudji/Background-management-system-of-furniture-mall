@@ -6,21 +6,29 @@
         <span>条件查询</span>
       </div>
       <el-form :model="form" ref="form" label-width="80px" size="mini">
-        <el-form-item label="订单编号">
-          <el-input v-model="form.orderSn"></el-input>
-        </el-form-item>
-        <el-form-item label="退单状态">
-          <el-select v-model="form.status">
-            <el-option label="待处理" :value="0"></el-option>
-            <el-option label="退货中" :value="1"></el-option>
-            <el-option label="已完成" :value="2"></el-option>
-            <el-option label="已拒绝" :value="3"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="doSearch">搜索</el-button>
-          <el-button>取消</el-button>
-        </el-form-item>
+        <el-row :gutter="20">
+          <el-col :span="6" :offset="0"><el-form-item label="订单编号">
+              <el-input v-model="form.orderSn" placeholder="请填写订单编号"></el-input>
+            </el-form-item></el-col>
+          <el-col :span="12" :offset="0"><el-form-item label="退单状态">
+              <el-select v-model="form.status" placeholder="退单状态">
+                <el-option label="待处理" :value="0"></el-option>
+                <el-option label="退货中" :value="1"></el-option>
+                <el-option label="已完成" :value="2"></el-option>
+                <el-option label="已拒绝" :value="3"></el-option>
+              </el-select>
+            </el-form-item></el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12" :offset="19">
+            <el-form-item>
+              <el-button type="primary" @click="doSearch">搜索</el-button>
+              <el-button>重置</el-button>
+            </el-form-item>
+          </el-col>
+
+        </el-row>
+
       </el-form>
 
     </el-card>

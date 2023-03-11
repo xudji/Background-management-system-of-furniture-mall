@@ -31,11 +31,7 @@ module.exports = {
         target: defaultSettings.host,
         changeOrigin: true
       },
-      /* '/admin': {
-        // 是否支持跨域
-        target: defaultSettings.host,
-        changeOrigin: true
-      } */
+
     },
     // 此处的before改成after 修改为after 如果是before会优先走moke数据 不走代理了 真实项目下面代码可以删除
     after: require('./mock/mock-server.js')
@@ -119,3 +115,4 @@ module.exports = {
       )
   }
 }
+

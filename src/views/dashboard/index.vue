@@ -41,11 +41,14 @@
                 </div>
               </el-col>
 
-              <div>完成百分比</div>
+
+
+              <div>销售百分比</div>
               <el-col align="center" :span="24" :offset="0" style="margin-top: 10px;">
                 <!-- 百分比进度条 -->
                 <div class="container" style="margin-bottom: 40px;">
                   <div class="progress3 progress-moved" id="child">
+                    <div id="myBar">0%</div>
                     <div class="progress-bar3">
                     </div>
                   </div>
@@ -175,69 +178,64 @@ import MapEchart from './components/MapEchart.vue';
 import screenfull from 'screenfull'
 import BgAnimate from './components/BgAnimate'
 import { parseTime } from '@/utils/index'
-
-'@/utils/index'
 export default {
   name: 'Dashboard',
   data() {
     return {
+
       p: '88%',
-      date: new Date(),
+      date: parseTime(new Date()),
       tableData: [{
         time: '12-04',
-        name: '集成灶',
-        amount: '23',
+        name: '灯光组合套餐',
+        amount: '83',
         money: '532330',
 
       }, {
         time: '12-04',
-        name: '洗碗机',
+        name: '家乐铭品鞋柜',
         amount: '125',
         money: '434310',
 
       }, {
         time: '12-05',
-        name: '烤箱',
-        amount: '68',
+        name: '北欧陶瓷花瓶',
+        amount: '680',
         money: '192200',
       }, {
         time: '12-07',
-        name: '油烟机',
+        name: '单人沙发椅北欧现代实木',
         amount: '87',
         money: '223334',
 
       }, {
         time: '12-11',
-        name: '微波炉',
+        name: '雷士（ NVC ）客厅灯',
         amount: '123',
         money: '429318',
 
       },
       {
         time: '12-11',
-        name: '微波炉',
+        name: '简野（JIANYE）B-16',
         amount: '123',
         money: '429318',
 
       },
       {
         time: '12-11',
-        name: '微波炉',
+        name: '鹿摆件',
         amount: '127',
         money: '429718',
 
       },
       {
         time: '12-11',
-        name: '微波炉',
+        name: '摇钱树',
         amount: '63',
         money: '229318',
 
       },
-
-
-
-
       ]
     }
   },
@@ -256,16 +254,19 @@ export default {
     screenfull,
     BgAnimate
   },
+  beforeCreate() {
+
+  },
   //vue实例创建
   created() {
 
   },
-  // demo好了
+  // dom好了
   mounted() {
-    let _this = this; // 声明一个变量指向Vue实例this，保证作用域一致
+    this.move()
     this.timer = setInterval(() => {
-      _this.date = parseTime(new Date()); // 修改数据date
-    }, 1000)
+      this.date = parseTime(new Date()); // 修改数据date
+    }, 0)
 
     // 给原生标签添加自定义样式
     document.getElementById('child').style.setProperty('--animationWidth', this.p)
@@ -306,6 +307,20 @@ export default {
     }
   },
   methods: {
+    move() {
+      var elem = document.getElementById("myBar");
+      var width = 1
+      var id = setInterval(frame, 30);
+      function frame() {
+        if (width >= 88) {
+          clearInterval(id);
+        } else {
+          width++;
+          elem.style.width = width + '%';
+          elem.innerHTML = width * 1 + '%';
+        }
+      }
+    },
     fullScreen() {
       if (screenfull.isEnabled) {
         screenfull.toggle(this.$refs.echartsMain);
@@ -367,6 +382,19 @@ export default {
       margin: 20px;
       color: #fff;
     }
+
+    #myProgress {
+      width: 280px;
+    }
+
+    #myBar {
+      position: absolute;
+      bottom: 26px;
+      text-align: right;
+      line-height: 0px;
+
+
+    }
   }
 
   .col2 {
@@ -377,17 +405,17 @@ export default {
     }
 
     .map {
-      margin-top: 20px;
-      width: 350px;
-      height: 250px;
+      margin: 20px 0px 0px -20px;
+      width: 400px;
+      height: 350px;
       position: absolute;
       z-index: 10;
     }
 
     .pic {
-      margin-top: 0px;
-      width: 300px;
-      height: 300px;
+      margin: 0px 0px 0px -40px;
+      width: 360px;
+      height: 360px;
       position: absolute;
       z-index: 10;
     }
@@ -507,6 +535,7 @@ export default {
   }
 
   .progress3 {
+    position: relative;
     border-radius: 30px;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08);
   }
@@ -523,24 +552,26 @@ export default {
     background-color: #475def;
     transition: 0.4s linear;
     transition-property: width, background-color;
-    animation: progressAnimation 6s forwards;
+    animation: progressAnimation 3.2s forwards;
   }
 
   @keyframes progressAnimation {
     0% {
       width: 5%;
       background-color: #ad4bda;
+
     }
 
     100% {
       // 自定义属性
       width: var(--animationWidth);
       background-color: #4a47ef;
+
     }
   }
 
   .world-cloud {
-    margin: 16px 0px 0px 0px;
+    margin: 16px 0px 0px 10px;
     width: 300px;
     height: 300px;
     background: linear-gradient(315deg, #19233c, #1b263e, );
