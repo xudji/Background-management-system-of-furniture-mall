@@ -12,7 +12,7 @@ const port = process.env.port || process.env.npm_config_port || 9528 // dev port
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
   // 打包独立部署时比如在gitee上部署时，要把这个地址改为上线仓库地址 /xxx/
-  publicPath: '/',
+  publicPath: '/joy-home-admin/', 
   outputDir: 'dist',
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',

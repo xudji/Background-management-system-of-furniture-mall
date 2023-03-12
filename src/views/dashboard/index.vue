@@ -106,7 +106,7 @@
                 <div class="statis-data-item">
                   <div><svg-icon icon-class="订单" class-name='custom-class' /></div>
                   <div class="statis-box">
-                    <div class="statis-count">85.6</div>
+                    <div class="statis-count">1.6</div>
                     <div class="statis-detail">订单总数（万）</div>
                   </div>
                 </div>
