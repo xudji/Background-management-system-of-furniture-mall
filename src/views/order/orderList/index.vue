@@ -68,8 +68,7 @@
           </el-table-column>
           <el-table-column label="支付方式" align="center">
             <template slot-scope="scope">
-            <!--  <svg-icon v-if="scope.row.payType == 2" icon-class="微信" class-name='custom-class' />
-                                                                            <svg-icon v-if="scope.row.payType == 1" icon-class="支付宝" class-name='custom-class' />                       <el-button v-if="scope.row.payType == 0" size="mini">未支付</el-button> -->
+
               <el-tag v-if="scope.row.payType == 2" type="success" size="mini" effect="dark">微信</el-tag>
               <el-tag v-if="scope.row.payType == 1" type="primary" size="mini" effect="dark">支付宝</el-tag>
               <el-tag v-if="scope.row.payType == 0" type="info" size="mini" effect="dark">未支付</el-tag>

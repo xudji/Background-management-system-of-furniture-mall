@@ -1,5 +1,5 @@
 # 进入项目目录
-cd vue-admin-template
+cd joy-home-admin
 
 # 安装依赖
 npm install

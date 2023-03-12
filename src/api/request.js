@@ -7,6 +7,7 @@ import { getToken, removeToken, removeUserInfo } from '@/utils/myAuth'
 // create an axios instance
 const service = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API,
+  baseURL: 'http://leju.bufan.cloud',
   timeout: 5000 // request timeout
 })
 

@@ -130,7 +130,8 @@ export function filterNullParams(obj) {
   }
   return newObj
 }
-// 初始化表单
+// 初始化表单 封装新增发货地址表单，首先在utils下新建初始化表单方法
+// this指向和需要初始化的属性(vm, option)
 export function initDataOption(vm, option) {
   vm[option] = vm.$options.data()[option]
 }

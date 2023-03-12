@@ -133,7 +133,7 @@
               </el-col>
               <el-col :span="8" :offset="0">
                 <el-form-item label="预告商品">
-                  <el-switch v-model="goods.newStatus"></el-switch>
+                  <el-switch v-model="goods.pmsSkuStockList"></el-switch>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -281,7 +281,10 @@ export default {
     return {
       step: 1,
       goods: {
-        pic: ''
+        pic: '',
+        serviceIds: [],
+        albumPics: [],
+        pmsSkuStockList: []
       },
       options: [],
       categoryList: [],
@@ -295,7 +298,6 @@ export default {
         skuList: [],
         skuSelectedList: []
       },
-      pmsSkuStockList: [],
       rules: {
         name: [
           { required: true, message: '请填写商品名称', trigger: 'blur' },

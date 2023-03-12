@@ -68,11 +68,8 @@ export default {
 
         };
     },
-
     components: {},
-
     computed: {},
-
     created() {
         this.getAddressList()
     },

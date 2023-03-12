@@ -93,12 +93,16 @@ export default {
         this.$refs.password.focus()
       })
     },
+
+    // 登录按钮绑定的点击事件
     handleLogin() {
+      // 拿到表单元素
       this.$refs.loginForm.validate(valid => {
         // 登录校验
         if (valid) {
           // 开启加载进度
           this.loading = true
+          // 主要替换如下内容,自己封装的login login请求接口
           login(this.loginForm).then(res => {
             // then接收响应结果
             const { success, data, message } = res
@@ -121,6 +125,8 @@ export default {
         }
       })
     }
+
+
   }
 }
 </script>

@@ -122,8 +122,8 @@
                 <div class="statis-data-item">
                   <div><svg-icon icon-class="消费者-5" class-name='custom-class' /></div>
                   <div class="statis-box">
-                    <div class="statis-count">92.6</div>
-                    <div class="statis-detail">人均消费</div>
+                    <div class="statis-count">6.8</div>
+                    <div class="statis-detail">人均消费(万元)</div>
                   </div>
                 </div>
                 <div class="statis-data-item" style="margin-right:13px">
@@ -209,7 +209,7 @@ export default {
         money: '223334',
 
       }, {
-        time: '12-11',
+        time: '12-10',
         name: '雷士（ NVC ）客厅灯',
         amount: '123',
         money: '429318',
@@ -230,7 +230,7 @@ export default {
 
       },
       {
-        time: '12-11',
+        time: '12-12',
         name: '摇钱树',
         amount: '63',
         money: '229318',

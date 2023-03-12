@@ -11,6 +11,7 @@ const port = process.env.port || process.env.npm_config_port || 9528 // dev port
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
+  // 打包独立部署时比如在gitee上部署时，要把这个地址改为上线仓库地址 /xxx/
   publicPath: '/',
   outputDir: 'dist',
   assetsDir: 'static',
@@ -23,15 +24,15 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    // 开发阶段绕过跨域问题c
+    // 代理，开发阶段绕过跨域问题
     proxy: {
-      // 以/lejuAdmin开头的相对路径都代理到target地址 不能有空格|
+      // 以/lejuAdmin或admin开头的相对路径都代理到target地址 不能有空格| 就是接口开头的首个路径
       '/(lejuAdmin|admin)': {
-        // 是否支持跨域
+        // 不要写死，写个变量 setting.js 中配置  module.exports = { host: 'http://leju.bufan.cloud' }统一暴露导出，const defaultSettings = require('./src/settings.js') 接收
         target: defaultSettings.host,
+        // 发送请求头中host会设置成target
         changeOrigin: true
       },
-
     },
     // 此处的before改成after 修改为after 如果是before会优先走moke数据 不走代理了 真实项目下面代码可以删除
     after: require('./mock/mock-server.js')

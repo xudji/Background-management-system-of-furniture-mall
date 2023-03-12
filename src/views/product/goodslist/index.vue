@@ -1,11 +1,6 @@
 <!--  -->
 <template>
   <div class="goods-list-main">
-    <el-collapse>
-      <el-collapse-item title="商品管理介绍">
-        <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
-      </el-collapse-item>
-    </el-collapse>
     <el-collapse class="margin-30">
       <el-collapse-item title="条件查询">
         <el-form :model="searchGoods" ref="form" label-width="120px" size="mini">
@@ -55,9 +50,6 @@
                 <el-button type="primary" @click="doSearchGoods">搜索</el-button>
               </el-form-item></el-col>
           </el-row>
-
-
-
         </el-form>
 
       </el-collapse-item>
@@ -217,7 +209,7 @@ export default {
         }
       })
     },
-    doSearchGoods() { 
+    doSearchGoods() {
       this.getGoodsList()
     },
     // 获取商品列表

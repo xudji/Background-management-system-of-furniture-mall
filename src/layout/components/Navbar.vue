@@ -9,6 +9,7 @@
         <div class="avatar-wrapper">
           <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" > -->
           欢迎管理员: <span>{{ username }}</span>
+          <!-- :src 绑定的是方法名 -->
           <img class="user-avatar" :src="avatar" alt="">
           <i class="el-icon-caret-bottom" />
         </div>
@@ -64,6 +65,7 @@ export default {
       return getUserInfo().icon
     },
     username() {
+      // 要return
       return getUserInfo().username
     }
   },
@@ -83,6 +85,7 @@ export default {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
+    // 退出逻辑，清除token和用户信息，跳转到登录页面,async 表示函数里有异步操作
     async logout() {
       removeToken()
       removeUserInfo()
