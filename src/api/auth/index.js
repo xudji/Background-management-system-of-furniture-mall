@@ -47,7 +47,19 @@ function getRolePermissions(id) {
   })
 }
 
-
+function findUsersByPage(start, limit, data) {
+  return request({
+    url: `/admin/sysAuth/user/findUsersByPage/${start}/${limit}`,
+    method: 'POST',
+    data
+  })
+}
+function removeUser(id) {
+  return request({
+    url: `/admin/sysAuth/user/removeUser/${id}`,
+    method: 'DELETE'
+  })
+}
 export {
   findAllPermissions,
   findRolesByPage,
@@ -55,5 +67,7 @@ export {
   saveRolePermissions,
   updateRolePermissions,
   findAllRoles,
-  getRolePermissions
+  getRolePermissions,
+  findUsersByPage,
+  removeUser
 }

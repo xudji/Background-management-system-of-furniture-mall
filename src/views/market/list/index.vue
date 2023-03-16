@@ -2,19 +2,19 @@
     <div class="list">
         <el-card class="margin-30" shadow="never">
             <div slot="header">
-                <el-button type="primary" size="mini">新增</el-button>
+                <el-button type="primary" size="mini" @click="showAdlist">新增</el-button>
             </div>
             <el-table v-loading="loading" :data="recommendsList.slice((currentPage - 1) * pagesize, currentPage * pagesize)"
                 style="width: 100%" border>
                 <el-table-column type="index" label="序号" align="center">
                 </el-table-column>
 
-                <el-table-column prop="pic" label="商品图片" width="150" align="center">
+                <el-table-column prop="pic" label="商品图片" align="center">
                     <template slot-scope="scope">
                         <img :src="scope.row.pic" style="width: 100px;" alt="">
                     </template>
                 </el-table-column>
-                <el-table-column prop="promotionStartTime,promotionEndTime" label="活动时间" width="260" align="center">
+                <el-table-column prop="promotionStartTime,promotionEndTime" label="活动时间" align="center">
                     <!-- 多个参数用插槽 -->
                     <template slot-scope="scope">
                         开始时间:{{ scope.row.promotionStartTime }}
@@ -22,22 +22,22 @@
                         结束时间:{{ scope.row.promotionEndTime }}
                     </template>
                 </el-table-column>
-                <el-table-column prop="promotionPerLimit" label="是否过期" width="120" align="center">
+                <el-table-column prop="promotionPerLimit" label="是否过期" align="center">
                     <template slot-scope="scope">
                         {{ scope.row.promotionPerLimit == '0' ? "过期" : scope.row.promotionPerLimit == '1' ? '' : '否' }}
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="商品名称" width="120" align="center">
+                <el-table-column prop="name" label="商品名称" align="center">
                 </el-table-column>
-                <el-table-column prop="brandName" label="品牌名称" width="160" align="center">
+                <el-table-column prop="brandName" label="品牌名称" align="center">
                 </el-table-column>
-                <el-table-column prop="price" label="商品价格" width="100" align="center">
+                <el-table-column prop="promotionPrice" label="商品价格" align="center">
                 </el-table-column>
-                <el-table-column prop="productCategoryName" label="商品类别" width="120" align="center">
+                <el-table-column prop="productCategoryName" label="商品类别" align="center">
                 </el-table-column>
-                <el-table-column prop="createTime" label="创建时间" width="160" align="center">
+                <el-table-column prop="createTime" label="创建时间" align="center">
                 </el-table-column>
-                <el-table-column fixed="right" label="操作" width="100" align="center">
+                <el-table-column fixed="right" label="操作" align="center">
                     <template slot-scope="scope">
                         <el-button @click.native.prevent="delRecommend(scope.row.recommendId)" type="text" size="small">
                             删除
@@ -53,13 +53,18 @@
             </el-pagination>
 
         </el-card>
+        <AddAdlist ref="AddAdlists" @refresh="getRecommends"></AddAdlist>
     </div>
 </template>
 
 <script>
 import { findAllRecommends as findAllRecommendsApi, delRecommend as delRecommendApi } from '@/api/market/list'
+import AddAdlist from './detail.vue'
 export default {
     name: 'list',
+    components: {
+        AddAdlist
+    },
     data() {
         return {
             loading: false,
@@ -76,6 +81,9 @@ export default {
         this.getListMedia()
     },
     methods: {
+        showAdlist() {
+            this.$refs.AddAdlists.openDialog()
+        },
         // 删除商品
         delRecommend(recommendId) {
             this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {

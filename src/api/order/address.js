@@ -7,11 +7,10 @@ function saveAddress(data) {
     data
   })
 }
-function addressList(data) {
+function addressList() {
   return request({
     url: `/lejuAdmin/companyAddress/addressList`,
     method: 'get',
-    data
   })
 }
 

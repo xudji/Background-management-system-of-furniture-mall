@@ -2,14 +2,10 @@
 <template>
   <div class="product-category-main">
 
-
-
     <el-card shadow="never" class="margin-30">
       <div slot="header">
         <span>分类管理</span>
       </div>
-
-
 
       <h4>乐居分类:</h4>
       <el-card shadow="never">
@@ -22,7 +18,6 @@
               <el-image style="width: 100%; height: 200px" :src="item.srcList" fit="cover"></el-image>
             </el-card>
           </el-col>
-
         </el-row>
       </el-card>
 
@@ -56,9 +51,7 @@
         <el-table-column label="创建时间" prop="createTime">
         </el-table-column>
 
-
       </el-table>
-
     </el-card>
 
   </div>
@@ -88,12 +81,7 @@ export default {
           categoryName: '灯具',
           srcList: 'https://bufan-apitown.oss-cn-beijing.aliyuncs.com/bftec/20201118165103745dengju.png',
         },
-
       ],
-
-
-
-
     };
   },
 

@@ -1,11 +1,6 @@
 import request from '@/api/request'
 // 查询全部
-function brandList() {
-  return request({
-    url: '/lejuAdmin/brand/findAllBrand',
-    method: 'get'
-  })
-}
+
 function findAllBrand() {
   return request({
     url: '/lejuAdmin/brand/findAllBrand',
@@ -50,13 +45,19 @@ function updateBrand(data) {
     data
   })
 }
-
+function brandList() {
+  return request({
+    url: '/lejuAdmin/brand/findAllBrand', // 相对路径
+    method: 'get'
+  })
+}
 export {
   addBrand,
-  brandList,
+
   switchShowStatus,
   updateBrand,
   deleteBrand,
   brandPageList,
-  findAllBrand
+  findAllBrand,
+  brandList
 }

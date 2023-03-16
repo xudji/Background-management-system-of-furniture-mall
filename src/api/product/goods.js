@@ -5,7 +5,7 @@ function productsByPage(start, limit, data) {
   return request({
     url: `/lejuAdmin/product/productsByPage/${start}/${limit}`,
     method: 'post',
-    data
+    data // 给服务器的数据
 
   })
 }
@@ -25,11 +25,27 @@ function addProductAndSkus(data) {
 
   })
 }
+function productDetail(id) {
+  return request({
+    url: `/lejuAdmin/product/productSkusDetail/${id}`, // 相对路径
+    method: 'get'
+  })
+}
+function updateProductAndSkus(data) {
+  return request({
+    url: `/lejuAdmin/product/updateProductAndSkus`, // 相对路径
+    method: 'post',
+    data
+  })
+}
 
 
 
 export {
   productsByPage,
   productSkusDetail,
-  addProductAndSkus
+  addProductAndSkus,
+  updateProductAndSkus,
+  productDetail
+
 }

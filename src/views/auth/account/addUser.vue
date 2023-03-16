@@ -34,9 +34,9 @@
   </div>
 </template>
 <script>
+import { updateUserRoles, findUserInfo, saveUserRoles } from '@/api/auth/user'
 
-import userApi from '@/api/auth/user'
-import { resetData } from '@/utils/index'
+
 export default {
   name: 'AuthUser',
   props: {
@@ -65,7 +65,7 @@ export default {
           { required: true, message: '密码不能为空', trigger: 'blur' }
         ]
       }
-     
+
     }
   },
   computed: {
@@ -86,7 +86,7 @@ export default {
       // 如果有id 是编辑
       if (id) {
         this.treeLoad = true
-        userApi.findUserInfo(id).then((res) => {
+        findUserInfo(id).then((res) => {
           if (res.success) {
             this.form = res.data.user
           } else {
@@ -98,10 +98,10 @@ export default {
     },
     handleClose() {
       this.dialog = false
-      // this.$refs.form.resetFields()
-      resetData(this, 'form')
+      this.$refs.form.resetFields()
+
     },
-    handleAvatarSuccess(res, file) {
+    handleAvatarSuccess(res) {
       console.log(res)
       if (res.success) {
         this.form.salt = res.data.fileUrl
@@ -128,16 +128,16 @@ export default {
         if (valid) {
           var api = null
           if (this.form.id) {
-            api = userApi.updateUserRoles
+            api = updateUserRoles
           } else {
-            api = userApi.saveUserRoles
+            api = saveUserRoles
           }
           api(this.form)
             .then(res => {
               if (res.success) {
                 this.$message.success('保存成功!')
-                this.handleClose()
                 this.$emit('refresh')
+                this.handleClose()
               } else {
                 this.$message.error(res.message)
               }
@@ -152,6 +152,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.user-form {}
-</style>
+<style lang="scss" scoped></style>

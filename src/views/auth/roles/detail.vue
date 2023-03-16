@@ -37,7 +37,9 @@
 </template>
 
 <script>
-import roleApi, { getRolePermissions } from '@/api/auth/index'
+
+
+import { getRolePermissions, saveRolePermissions, updateRolePermissions } from '@/api/auth/index'
 export default {
   name: 'AuthUser',
   props: {
@@ -101,28 +103,31 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           var api = null
-
           var role = {
             ... this.form,
             // 不包含半选
             permissionIds: this.$refs.tree.getCheckedKeys()
           }
           if (role.id) {
-            api = roleApi.updateRolePermissions
+            api = updateRolePermissions
           } else {
-            api = roleApi.saveRolePermissions
+            api = saveRolePermissions
           }
           api(role)
             .then(res => {
               if (res.success) {
-                this.$message.success('保存成功!')
-                this.handleClose()
-                this.$emit('refresh')
+                this.$message.success('保存成功!'),
+
+                  this.handleClose()
+                this.$emit('refresh');
+
               } else {
                 this.$message.error('保存失败!')
+                return false
               }
             })
-        } else {
+        }
+        else {
           this.$message.error('请注意表单验证!')
           return false
         }
@@ -159,6 +164,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.role-form {}
-</style>
+<style lang="scss" scoped></style>

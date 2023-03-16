@@ -13,10 +13,14 @@ export default {
         totalNum: 0,
         pageSizes: [10, 20, 30, 40]
       },
-
+      loadingOption: {
+        background: 'rgba(255,255,255,.9)',
+        text: 'loading.....',
+        spinner: 'el-icon-loading'
+      },
     }
   },
-  
+
   computed: {
     token() {
       return {

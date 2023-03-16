@@ -41,7 +41,7 @@ function findUserInfo(userId) {
     })
 }
 
-export default {
+export {
     findUsersByPage,
     saveUserRoles,
     updateUserRoles,

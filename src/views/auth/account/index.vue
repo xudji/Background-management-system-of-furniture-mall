@@ -58,9 +58,9 @@
 </template>
 
 <script>
-import userApi from '@/api/auth/user'
-import UserForm from '../addUser/addUser.vue'
-import { findAllRoles } from '@/api/auth/index'
+
+import UserForm from './addUser.vue'
+import { findAllRoles, findUsersByPage, removeUser } from '@/api/auth/index'
 export default {
   name: 'AuthUser',
   components: {
@@ -96,7 +96,7 @@ export default {
     },
     getUserList() {
       this.loading = true
-      userApi.findUsersByPage(this.page.start, this.page.limit).then((res) => {
+      findUsersByPage(this.page.start, this.page.limit).then((res) => {
         if (res.success) {
           this.userList = res.data.rows
           this.page.totalCount = res.data.total
@@ -114,7 +114,8 @@ export default {
     },
     doDel(id) {
       this.$confirm('确认删除?').then((res) => {
-        userApi.removeUser(id).then((res) => {
+        console.log(res)
+        removeUser(id).then((res) => {
           if (res.success) {
             this.$message.success('删除成功!')
             this.getUserList()
@@ -129,8 +130,14 @@ export default {
       this.$refs.searchForm.resetFields()
     },
     doSearch() { },
-    sizeChange(v) { },
-    currentChange(v) { }
+    sizeChange(v) {
+      this.page.limit = v;
+      this.getUserList();
+    },
+    currentChange(v) {
+      this.page.start = v;
+      this.getUserList();
+    }
   }
 }
 </script>

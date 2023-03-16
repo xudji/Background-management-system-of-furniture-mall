@@ -11,10 +11,10 @@
         </el-table-column>
         <el-table-column prop="addressName" label="地址名称" width="120">
         </el-table-column>
-        <el-table-column prop="sendStatus" label="默认发货地址" width="200">
+        <el-table-column label="默认发货地址" width="200" align="center">
           <template slot-scope="scope">
-            默认发货地址： <el-switch v-model="scope.row.sendStatus" @change="changeSwitch(scope.row)">
-            </el-switch>
+            默认发货地址:<el-switch v-model="scope.row.sendStatus" :active-value="1" :inactive-value="0"
+              @change="switchStatus('sendStatus', scope.row)" />
           </template>
         </el-table-column>
         <el-table-column prop="name" label="收获人姓名" width="120">
@@ -28,16 +28,17 @@
             {{ scope.row.detailAddress }}
           </template>
         </el-table-column>
-        <el-table-column prop="receiveStatus" label="默认收货地址" width="200">
+        <el-table-column label="默认收货地址" width="200" align="center">
           <template slot-scope="scope">
-            默认收货地址: <el-switch v-model="scope.row.receiveStatus" :active-value="1" :inactive-value="0">
-            </el-switch>
+            默认收货地址:<el-switch v-model="scope.row.receiveStatus" :active-value="1" :inactive-value="0"
+              @change="switchStatus('receiveStatus', scope.row)" />
           </template>
         </el-table-column>
+
         <el-table-column prop="createTime" label="创建时间" width="180">
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="150">
-          <template slot-scope="scope">
+          <template>
 
             <el-button type="text" style="color:red" size="small" @click="showAddAddress">编辑</el-button>
             <el-button type="text" size="small">删除</el-button>
@@ -55,10 +56,11 @@
 </template>
 
 <script>
+//  import addressApi from '@/api/order/address'
 import AddressDialog from './Detail.vue'
-import { addressList as addressListApi, setSendOne as setSendOneApi, setReceiveOne as setReceiveOneApi } from '@/api/order/address'
+import { addressList } from '@/api/order/address'
 export default {
-  name: 'Address',
+  name: 'AddRess',
   components: {
     AddressDialog
   },
@@ -76,40 +78,34 @@ export default {
       this.$refs.dialogAdress.openDialog()
     },
     getAddressList() {
-      addressListApi().then((res) => {
+      addressList().then((res) => {
         console.log('地址', res)
         this.tableData = res.data.items
       })
     },
-    //更改默认发货
-    changeSwitch(row) {
-      const data = {
-        // 传入要修改的id
-        id: row.id,
-        sendStatus: row.sendStatus,
-      };  // 
-      setSendOneApi(data).then(res => {
-        const { success } = res
-        if (success) {
-          // 调用表格数据,刷新数据,数据驱动视图,data => ui
-          this.getAddressList();
-          this.$message.success('修改默认发货地址成功');
+
+    switchStatus(statusName, row) {
+      var switchApi = statusName === 'receiveStatus' ? 'setReceiveOne' : 'setSendOne'
+      // 暂存原来的状态
+      var tempStatus = row[statusName] === 0 ? 1 : 0
+      var params = {}
+      params[statusName] = row[statusName]
+      params.id = row.id
+      switchApi(params).then(res => {
+        if (res.success) {
+          this.$message.success('修改状态成功')
+          this.getAddressList()
+          console.log(res)
         } else {
-          this.$message.error('修改默认发货地址成功');
-          // 调用表格数据 
-          this.getAddressList();
+          // 重置switch 变回原来的状态
+          row[statusName] = tempStatus
+          this.$message.error('修改状态失败')
         }
-        this.loading = false;
-      }).catch({
-
-      });
-    },
-    //更改默认收货
-    setReceiveOne() {
-      setReceiveOneApi().then((res) => {
-
       })
     },
+
+
+
   },
 }
 </script>

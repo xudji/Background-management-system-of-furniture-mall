@@ -28,13 +28,13 @@
         :page-sizes="pagniationParams.pageSizes" :current-page.sync="pagniationParams.start"
         @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </el-card>
-    <RoleForm ref="roleForm" :menuList="menuList" @refresh="findRolesByPage" />
+    <RoleForm ref="roleForm" :menuList="menuList" @refresh="findRolesByPage" @getAllMenu="getAllMenuList" />
 
   </div>
 </template>
 
 <script>
-import { findRolesByPage as findRolesByPageApi, removeRole as removeRoleApi, findAllPermissions as findAllPermissionsApi, getRolePermissions} from '@/api/auth/index'
+import { findRolesByPage as findRolesByPageApi, removeRole as removeRoleApi, findAllPermissions as findAllPermissionsApi, getRolePermissions } from '@/api/auth/index'
 import RoleForm from './detail.vue'
 import mix from '@/mixins';
 export default {
@@ -88,7 +88,7 @@ export default {
         } else {
           this.$message.error(message)
         }
-        this.loading = false
+
       })
     },
 

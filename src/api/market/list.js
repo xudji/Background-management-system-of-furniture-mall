@@ -13,8 +13,25 @@ function delRecommend(recommendId) {
     method: 'delete',
   })
 }
+function updateRecommend(data) {
+  return request({
+    url: `/lejuAdmin/homeRecommend/updateRecommend`,
+    method: 'post',
+    data
+  })
+}
+function addRecommend(data) {
+  return request({
+    url: `/lejuAdmin/homeRecommend/addRecommend`,
+    method: 'post',
+    data
+  })
+}
+
 export {
   findAllRecommends,
-  delRecommend
+  delRecommend,
+  updateRecommend,
+  addRecommend
 }
 

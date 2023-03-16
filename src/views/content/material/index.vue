@@ -53,6 +53,7 @@ export default {
   methods: {
     marterialUploadSucc(res) {
       console.log(res)
+      this.getMaterialList()
     },
     exceedChange() {
       console.log('超出图片个数')
