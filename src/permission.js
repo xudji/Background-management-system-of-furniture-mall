@@ -1,15 +1,13 @@
-import router from './router'
+
 // import store from './store'
 // import { Message } from 'element-ui'
+import router from './router'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/myAuth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
-
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
-
 const whiteList = ['/login'] // no redirect whitelist
-
 router.beforeEach(async (to, from, next) => {
   // 进度条
   NProgress.start()
@@ -37,7 +35,6 @@ router.beforeEach(async (to, from, next) => {
     }
   }
 })
-
 router.afterEach(() => {
   // 完成进度条
   NProgress.done()

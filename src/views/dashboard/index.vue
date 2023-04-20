@@ -236,7 +236,8 @@ export default {
         money: '229318',
 
       },
-      ]
+      ],
+      orderList: []
     }
   },
   computed: {
@@ -259,7 +260,7 @@ export default {
   },
   //vue实例创建
   created() {
-
+    this.getOrderData()
   },
   // dom好了
   mounted() {
@@ -269,37 +270,7 @@ export default {
     }, 0)
 
     // 给原生标签添加自定义样式
-    document.getElementById('child').style.setProperty('--animationWidth', this.p)
-    // 初始化echarts实例
-    var demoEchart = echarts.init(document.getElementById('demo'),);
-    demoEchart.setOption({
-      title: {
-        text: 'ECharts 入门示例'
-      },
-      tooltip: {},
-      xAxis: {
-        data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
-      },
-      yAxis: {},
-      series: [
-        {
-          name: '销量',
-          type: 'line',
-          data: [5, 20, 36, 10, 10, 20]
-        }
-        ,
-        {
-          name: 'demo',
-          type: 'bar',
-          data: [5, 20, 36, 10, 10, 20]
-        },
-        {
-          name: 'dem',
-          type: 'scatter',
-          data: [5, 20, 36, 10, 10, 20]
-        }
-      ]
-    });
+
   },
   beforeDestroy() {
     if (this.timer) {
@@ -324,6 +295,28 @@ export default {
     fullScreen() {
       if (screenfull.isEnabled) {
         screenfull.toggle(this.$refs.echartsMain);
+      }
+    },
+    getOrderData() {
+
+      // SSE 部署到了 EventSource 对象 IE不支持
+      const source = new EventSource('http://localhost:9528/getData') // 第二个参数带cookies 一般不填
+      // source.readyState = 0 客户端与服务器正在连接 连接状态
+      // source.readyState = 1 客户端与服务器已经建立连接 连接状态
+      // source.readyState = 2 客户端与服务器已经断开连接 连接状态
+      console.log('source-----', source)
+      // 客户端与服务器建立连接时 触发
+      source.onopen = function (event) {
+        console.log('onopen', event)
+      }
+      // 客户端与服务器推送消息时时 触发
+      source.onmessage = function (event) {
+        console.log('onmessage', event)
+        this.orderList = JSON.parse(event.data)
+      }
+      // 客户端与服务器连接出错 触发
+      source.onerror = function (event) {
+        console.log('onerror', event)
       }
     }
   }

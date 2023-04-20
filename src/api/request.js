@@ -3,14 +3,12 @@ import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken, removeToken, removeUserInfo } from '@/utils/myAuth'
 // import { remove } from 'nprogress'
-
 // create an axios instance
 const service = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API,
   baseURL: 'http://leju.bufan.cloud',
   timeout: 5000 // request timeout
 })
-
 // request interceptor
 service.interceptors.request.use(
   config => {
@@ -25,7 +23,6 @@ service.interceptors.request.use(
   }
 )
 service.interceptors.response.use(
-
   response => {
     const res = response.data
     if (res.code !== 20000) {
@@ -66,5 +63,4 @@ service.interceptors.response.use(
     return Promise.reject(error)
   }
 )
-
 export default service
