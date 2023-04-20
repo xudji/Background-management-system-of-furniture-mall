@@ -73,3 +73,11 @@ npm run dev
  https://xudji.github.io/joy-home-admin/
 
 ## 预览图片
+
+![Image text](https://github.com/xudji/Background-management-system-of-furniture-mall/blob/main/tests/images/%E5%93%81%E7%89%8C%E7%AE%A1%E7%90%86.jpg)     
+
+![Image text](https://github.com/xudji/Background-management-system-of-furniture-mall/blob/main/tests/images/%E5%95%86%E5%93%81%E5%88%86%E7%B1%BB.jpg)     
+
+![Image text](https://github.com/xudji/Background-management-system-of-furniture-mall/blob/main/tests/images/%E8%AE%A2%E5%8D%95%E5%88%97%E8%A1%A8.jpg)     
+
+![Image text](https://github.com/xudji/Background-management-system-of-furniture-mall/blob/main/tests/images/%E8%AE%A2%E5%8D%95%E8%AF%A6%E6%83%85.jpg)     
