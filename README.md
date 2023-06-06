@@ -71,7 +71,3 @@ npm run dev
 ## 项目在线预览地址
 
  https://xudji.github.io/joy-home-admin/
-
-
-
-![Image text](https://github.com/xudji/Background-management-system-of-furniture-mall/blob/main/tests/images/%E8%AE%A2%E5%8D%95%E8%AF%A6%E6%83%85.jpg)     
